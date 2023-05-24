@@ -1,3 +1,11 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -35,28 +43,38 @@
          <nav class="navbar navbar-custom navbar-expand-md ">
             <div class="container">
                 <div class="ht-left">
-                    <div class="mail-service">
-                        <i class=" fa fa-envelope"></i>
-                        Medicarepharmacy@gmail.com
-                    </div>
-                    <div class="phone-service">
-                       <i class="fa fa-phone" aria-hidden="true"></i>
-                       +971 524 518
-                    </div>
                 </div>
-                <div class="ht-right">
-                    <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
-                    <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <?php
+                if(isset($_SESSION["first_name"]) && $_SESSION["first_name"]!=""){
+                    $name= $_SESSION["first_name"];
+
+                    echo '<div class="ht-right">
+                    <span class="text-dark">Welcome!</span><a class="text-white" href="my_account.php" class="login-panel">'.$name.'</a>
+                    <a href="logout.php" class="login-panel"><i class="fa fa-sign-out"></i></a>
                     <div class="lan-selector">
                     </div>
+                    </div>';
+                    
+                }else
+                {
+                echo'<div class="ht-right">
+                <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
+                <div class="lan-selector">
                 </div>
+            </div>
+        </div>';
+                
+             } ?>
             </div>
         </div>
 
 
         <!-- search nave -->
         
-            <div class="inner-header">
+        <div class="inner-header">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                <div class="row align-items-center">
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
@@ -66,27 +84,30 @@
                         </div>
                     </div>
                     <div class="col-lg-7 col-md-7">
-                        <div class="advanced-search">
-                            
+                        <div class="advanced-search">   
                             <div class="input-group">
-                                <input type="text" placeholder="Search">
-                                <button type="button"><i class="ti-search"></i></button>
+                                <!-- <input type="text" placeholder="Search">
+                                <button type="button"><i class="ti-search"></i></button> -->
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <div class="col-lg-3 text-right col-md-3">
                         <ul class="nav-right">
-                        <button type="button" class="btn btn-primary"> <a href="Prescription.php">prescrption</button>            
+                        <a href="Prescription.php">
+                        <img src="https://img.icons8.com/fluency-systems-filled/22/null/file-prescription.png"alt="Uplod Prescription"/>
+                            </a>           
                             <li class="cart-icon">
-                                <a href="check-out.php">
-                                    <i class="icon_bag_alt"></i>
+                                <a href="testcheckout.php">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+    </div> 
 
 <!-- catogory -->        
 <div class="nav-item">
@@ -94,15 +115,15 @@
                 <div class="nav-depart">
 </div>
                 <nav class="nav-menu mobile-menu">
-                    <ul>
-                        <li><a href="medicine_list.php?type=Medicine">Medicine</a></li>
-                        <li><a href="medicine_list.php?type=Mediacal Divice">Mediacal device</a></li>
-                        <li><a href="medicine_list.php?type=Wellenss">Wellenss</a></li>
-                        <li><a href="medicine_list.php?type=Aurwedha">Aurwedha</a> </li>
-                        <li><a href="medicine_list.php?type=Personal Care">Personal Care</a></li>
-                        <li><a href="medicine_list.php?type=Other">Other</a></li>
-                        </li>
-                    </ul>
+                <ul>
+                    <li><a class="<?php if($_GET['type'] == 'Medicine'){echo "active text-white";} ?>" href="medicine_list.php?type=Medicine">Medicine</a></li>
+                    <li><a class="<?php if($_GET['type'] == 'Mediacal Divice'){echo "active text-white";} ?>" href="medicine_list.php?type=Mediacal Divice">Medical device</a></li>
+                    <li><a class="<?php if($_GET['type'] == 'Wellenss'){echo "active text-white";} ?>" href="medicine_list.php?type=Wellenss">Wellness</a></li>
+                    <li ><a class="<?php if($_GET['type'] == 'Aurwedha'){echo "active text-white";} ?>" href="medicine_list.php?type=Aurwedha">Ayurveda</a> </li>
+                    <li><a class="<?php if($_GET['type'] == 'Personal Care'){echo "active text-white";} ?>" href="medicine_list.php?type=Personal Care">Personal Care</a></li>
+                    <li><a  class="<?php if($_GET['type'] == 'Other'){echo "active text-white";} ?>" href="medicine_list.php?type=Other">Other</a></li>
+                    </li>
+                </ul>
                 </nav>
                 <div id="mobile-menu-wrap"></div>
             </div>
@@ -118,7 +139,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
-                        <a href="home_page.php"><i class="fa fa-home"></i> Home></a>
+                        <a href="home_page.php"><i class="fa fa-home"></i> Home</a>
                     </div>
                 </div>
             </div>
@@ -132,19 +153,9 @@
             <div class="row">
                
                 <div class="col-lg-12 order-1 order-lg-2" >
-                    <div class="product-show-option">
-                        <div class="row">
-                            <div class="col-lg-7 col-md-7">
-                                <div class="select-option">
-                                    <div class="col-lg-5 col-md-5 text-right">
-                                       <p>Show 01- 09 Of 36 Product</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>        
+                           
                     <div class="product-list">
-                        <div class="row">
+                    <div class="row">
 
 
 
@@ -177,13 +188,21 @@
                             if($result->num_rows>0){
                                 while($row=$result->fetch_assoc()){
                                     //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
-
+                                    //<a href="./page.php?name='.$row["c_name"].'&amp;age=16">Page</a>
                               echo    
                                     ' 
                                     <div class="col-lg-4 col-sm-6">
                                     <div class="product-item">
                                         <div class="pi-pic">
-                                            <a href="view_items.php?cat='.$row["c_name"] .'"><img src="'.$row["image_path"] .'" alt="'.$row["c_name"].'"></a>
+                                            <a href="view_items.php?cat='.$row["c_name"].'&amp;type='.$type.'">
+                                            <div class="card" style="width: 300px;">
+                                            <img class="card-img" src="img/medicine catogoty/medicine/PHARMACEUTICAL.jpg" alt="Card image" style = "opacity:0.9;">
+                                            <div class="card-img-overlay">
+                                            <div class="card-body">
+                                              <h5 class="card-title"><b>'.$row["c_name"].'</b></h5>
+                                            </div>
+                                            </div>
+                                          </div></a>
                                         </div>
                                     </div>
                                     </div>
@@ -212,7 +231,7 @@
                       
 
 
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -264,7 +283,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <!-- <div class="col-lg-4">
                     <div class="newslatter-item">
                         <h5>Join Our Newsletter Now</h5>
                         <p>Get E-mail updates about our latest shop and special offers.</p>
@@ -273,7 +292,7 @@
                             <button type="button">Subscribe</button>
                         </form>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="copyright-reserved">

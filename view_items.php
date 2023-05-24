@@ -1,4 +1,9 @@
-
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+   
+?>
 
 <!DOCTYPE html>
 <html lang>
@@ -36,28 +41,38 @@
         <div class="header-top ">
          <nav class="navbar navbar-custom navbar-expand-md ">
             <div class="container">
-                <div class="ht-left">
-                    <div class="mail-service">
-                        <i class=" fa fa-envelope"></i>
-                        Medicarepharmacy@gmail.com
+            <div class="ht-left">
                     </div>
-                    <div class="phone-service">
-                       <i class="fa fa-phone" aria-hidden="true"></i>
-                       +971 524 518
-                    </div>
-                </div>
-                <div class="ht-right">
-                    <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
-                    <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <?php
+                if(isset($_SESSION["first_name"]) && $_SESSION["first_name"]!=""){
+                    $name= $_SESSION["first_name"];
+
+                    echo '<div class="ht-right">
+                    <span class="text-dark">Welcome!</span><a class="text-white" href="my_account.php" class="login-panel">'.$name.'</>
+                    <a href="logout.php" class="login-panel"><i class="fa fa-sign-out"></i></a>
                     <div class="lan-selector">
                     </div>
+                    </div>';
+                    
+                }else
+                {
+                echo'<div class="ht-right">
+                <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
+                <div class="lan-selector">
                 </div>
+            </div>
+        </div>';
+                
+             } ?>
             </div>
         </div>
 
         <!-- search nave -->
         
-            <div class="inner-header">
+        <div class="inner-header">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                <div class="row align-items-center">
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
@@ -66,28 +81,29 @@
                             </a>
                         </div>
                     </div>
+                    
+                    <!-- shop open,close time -->
+
                     <div class="col-lg-7 col-md-7">
-                        <div class="advanced-search">
-                            
-                            <div class="input-group">
-                                <input type="text" placeholder="Search">
-                                <button type="button"><i class="ti-search"></i></button>
-                            </div>
-                        </div>
-                    </div>
+                    </div> 
+
                     <div class="col-lg-3 text-right col-md-3">
                         <ul class="nav-right">
-                        <button type="button" class="btn btn-primary"> <a href="Prescription.php">prescrption</button>            
+                        <a href="Prescription.php">
+                        <img src="https://img.icons8.com/fluency-systems-filled/22/null/file-prescription.png"alt="Uplod Prescription"/>
+                            </a>           
                             <li class="cart-icon">
-                                <a href="check-out.php">
-                                    <i class="icon_bag_alt"></i>
+                                <a href="testcheckout.php">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+    </div> 
 
 <!-- catogory -->        
 <div class="nav-item">
@@ -95,15 +111,15 @@
                 <div class="nav-depart">
 </div>
                 <nav class="nav-menu mobile-menu">
-                    <ul>
-                    <li><a href="medicine_list.php?type=Medicine">Medicine</a></li>
-                        <li><a href="medicine_list.php?type=Mediacal Divice">Mediacal device</a></li>
-                        <li><a href="medicine_list.php?type=Wellenss">Wellenss</a></li>
-                        <li><a href="medicine_list.php?type=Aurwedha">Aurwedha</a> </li>
-                        <li><a href="medicine_list.php?type=Personal Care">Personal Care</a></li>
-                        <li><a href="medicine_list.php?type=Other">Other</a></li>
-                        </li>
-                    </ul>
+                <ul>
+                    <li><a class="<?php if($_GET['type'] == 'Medicine'){echo "active text-white";} ?>" href="medicine_list.php?type=Medicine">Medicine</a></li>
+                    <li><a class="<?php if($_GET['type'] == 'Mediacal Divice'){echo "active text-white";} ?>" href="medicine_list.php?type=Mediacal Divice">Medical device</a></li>
+                    <li><a class="<?php if($_GET['type'] == 'Wellenss'){echo "active text-white";} ?>" href="medicine_list.php?type=Wellenss">Wellness</a></li>
+                    <li ><a class="<?php if($_GET['type'] == 'Aurwedha'){echo "active text-white";} ?>" href="medicine_list.php?type=Aurwedha">Ayurveda</a> </li>
+                    <li><a class="<?php if($_GET['type'] == 'Personal Care'){echo "active text-white";} ?>" href="medicine_list.php?type=Personal Care">Personal Care</a></li>
+                    <li><a  class="<?php if($_GET['type'] == 'Other'){echo "active text-white";} ?>" href="medicine_list.php?type=Other">Other</a></li>
+                    </li>
+                </ul>
                 </nav>
                 <div id="mobile-menu-wrap"></div>
             </div>
@@ -137,59 +153,50 @@
     <section class="product-shop spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
+                <div class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter" style="background-color: #f7f7f7;">
 
                 
 
                 
                              <?php 
 
-                            include 'db_connection.php';// connection
-                            if(isset($_GET['type'])){   
-                                $type = $_GET['type'];
-                                //echo $cat."<br><br>" ;
-                                
-
-                            }
-                            else{
-                                //echo "no ctogory selected";
-                                //echo '<script>alert("No Catagory Selected !");</script>';
-                                $type="Medicine";
-                            }
-
-
-
-
-                            $sql = "SELECT * FROM category WHERE c_type='".$type."'"; 
-                                $result = mysqli_query($connection, $sql);
-                                
-                                if($result->num_rows>0){
-                                    while($row=$result->fetch_assoc()){
-                                        //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
-
-                                echo    
-                                        ' 
-                                        <div class="filter-widget">
-                                        <ul class="filter-catagories">
-                                            <li><a href="view_items.php?cat='.$row["c_type"] .'"> <h6>'.$row["c_name"].'</h6></a></li>
-                                        </ul>
-                                        </div>
-                                        
-                                        ';
-
-                                       
-
-
-                                    }
-
+                                include 'db_connection.php';// connection
+                                if(isset($_GET['type'])){   
+                                    $type = $_GET['type'];
+                                    //echo $cat."<br><br>" ;
+                                    
 
                                 }
                                 else{
-
-                                    echo "no result found";
-                                    //echo '<script>alert("No Results Found");</script>';
+                                    //echo "no ctogory selected";
+                                    //echo '<script>alert("No Catagory Selected !");</script>';
+                                    $type="Medicine";
                                 }
-                                //$connection->close();
+
+
+                                $sql = "SELECT * FROM category WHERE c_type='".$type."'"; 
+                                    $result = mysqli_query($connection, $sql);
+                                    
+                                    if($result->num_rows>0){
+                                        while($row=$result->fetch_assoc()){
+                                            //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
+
+                                    echo    
+                                            ' 
+                                            <div class="filter-widget">
+                                            <ul class="filter-catagories">
+                                                <li><a href="view_items.php?cat='.$row["c_name"].'&amp;type='.$type.'"> <h6>'.$row["c_name"].'</h6></a></li>
+                                            </ul>
+                                            </div>
+                                            ';
+                                        }
+                                    }
+                                    else{
+
+                                        echo "no result found";
+                                        //echo '<script>alert("No Results Found");</script>';
+                                    }
+                                    //$connection->close();
 
 
 
@@ -210,25 +217,9 @@
                     </div>
                 </div>
                 <div class="col-lg-9 order-1 order-lg-2">
-                    <div class="product-show-option">
-                        <div class="row">
-                            <div class="col-lg-7 col-md-7 ">
-                                <div class="select-option">
-                                    <select class="sorting">
-                                        <option value="">Default Sorting</option>
-                                    </select>
-                                    <div class="col-lg-5 col-md-5 text-right">
-                                       <p>Show 01- 09 Of 36 Product Kalhara</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+ 
                     <div class="product-list">
                         <div class="row">
-
-                        
 
                         <?php 
 
@@ -237,58 +228,52 @@
                             //echo $cat."<br><br>" ;
                          
 
-                             $sql = "SELECT * FROM item WHERE category_type='".$cat."'"; 
+                            $sql = "SELECT * FROM item WHERE category_type='".$cat."'"; 
                             $result = mysqli_query($connection, $sql);
                                     
                                 if($result->num_rows>0){
+
+                                    (int)$item_size = 1 ;
+                                    $current_page_number = 1 ;
                                         while($row=$result->fetch_assoc()){
                                     //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
-
+                                          
                               echo    
+
+
                                     ' 
-                                        <div class="col-lg-4 col-sm-6" >
-                                            <div class="product-item">
+                                    <div class="col-lg-4 col-sm-6 page'.$current_page_number.' pageclass">
+                                        <div class="product-item">
                                                 <div class="pi-pic">
-                                                <img src="'.$row["data_path"] .'" alt="'.$row["item_name"].'">
+                                                <img src="items/'.$row['data_path'].'" alt="'.$row["item_name"].'" width="180" height="180">
                                                 </div>
                                             <div class="pi-text">
-                                            <div class="catagory-name">'.$cat.'</div>
-                                             <a href="product.php">
-                                            <h5>'.$row["item_name"].'</h5>
-                                        </a>
-                                        <div class="product-price">
-                                        RS.'.$row["unit_price"].'
+                                                 <div class="catagory-name">'.$cat.'</div>
+                                                        <h5>'.$row["item_name"].'</h5>
+                                                <div class="product-price">
+                                                    RS.'.$row["unit_price"].'
+                                                 </div>
+                                                 <a href="item.php?itemcode='.$row["item_id"] .'&amp;type='.$type.'" class="primary-btn pd-cart">ORDER NOW</a>
+                                             </div>
                                         </div>
-                                        <a href="item.php" class="primary-btn pd-cart">ODER NOW</a>
-                                    </div>
-                                </div>
-                            </div>';
+                                    </div>';
+                                    
+                                    if($item_size%6 == 0 ){
+                                                
+                                        $current_page_number = $current_page_number +1 ;
+
+                                    }
+
+                                        $item_size =  $item_size+1;
 
 
                                 }
 
 
-                                echo '
-
-                                <div class="loading-more">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
-                                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                    </ul>
-                                </nav>
-                                </div>
-
-                                
-                                ';
-
-
                             }
                             else{
 
+                                $current_page_number =0;
                                 echo "no result found";
                                 //echo '<script>alert("No Results Found");</script>';
                             }
@@ -296,14 +281,69 @@
 
                         }
                         else{
-                            echo "no ctogory selected";
+                            echo "no items selected";
+                            $current_page_number =0;
                             //echo '<script>alert("No Catagory Selected !");</script>';
                         }
 
                         ?>
       
                         </div>
+
+                        
+                        <div class="row">
+                            <div class="loading-more">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                       
+                                    
+                                       <input type="text" id="total_page" hidden value="<?php if($current_page_number){echo $current_page_number;}  ?>">
+                                       <input type="text" id="curent_page" hidden value="1" >
+                                       
+
+                                        <?php
+
+                                        if($current_page_number != 0){
+
+                                            echo '
+                                                    <li class="page-item" onclick="direct_to_page(-1)"><a class="page-link" href="#">Previous</a></li>
+                                                 ';
+
+                                            for($y=1; $y <= $current_page_number; $y++ ){
+                                                        
+                                                echo '
+    
+                                                    <li class="page-item" id="'.$y.'" onclick="click_page(this.id)"><a class="page-link" href="#">'.$y.'</a></li>
+                                                
+                                                ';
+    
+                                            }
+
+                                        
+                                            echo '
+                                                    <li class="page-item" onclick="direct_to_page(+1)"><a class="page-link" href="#">Next</a></li>
+                                                 ';
+                                       
+                                        }
+                                        
+                                       
+                                        ?>
+
+                                       
+                                        
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+
+                        
+
+
                     </div>
+
+
+
                 </div>
             </div>
         </div>
@@ -396,6 +436,74 @@
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
+
+    <script>
+
+    // hide other pages items and only show 1st page items
+    $( document ).ready(function() {
+
+        $('.pageclass').hide();
+
+        $('.page1').show();
+    
+    });
+
+
+    // when user click page number page items show and other items hide
+            function click_page (value){
+
+            // alert(value);
+
+                var total_page = document.getElementById("total_page").value;
+
+                document.getElementById("curent_page").value = value;
+
+                var tmp_pageid = "page"+value;
+
+
+                $('.pageclass').hide();
+
+                $('.'+tmp_pageid).show();
+
+            }
+
+    // next and previous btn function
+
+            function direct_to_page(page){
+
+
+                var current_page = document.getElementById("curent_page").value;
+                var total_page = document.getElementById("total_page").value;
+
+                //alert(page);
+
+                var new_page = parseInt(current_page) + parseInt(page);
+
+                if(total_page >= new_page && new_page > 0){
+
+                    document.getElementById("curent_page").value = new_page;
+
+                // alert("Select page is : "+new_page);
+
+                    var tmp_pageid = "page"+new_page;
+
+
+                $('.pageclass').hide();
+
+                $('.'+tmp_pageid).show();
+
+                }
+                else {
+                    alert("Not Avalible");
+                }
+
+            }
+
+
+    </script>
+
+
+
 </body>
 
 </html>

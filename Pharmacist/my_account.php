@@ -1,3 +1,17 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["pharmacist_id"])){
+    
+    
+}
+else{
+    header("location:../home_page.php");
+}
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -9,7 +23,7 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
     
-    <title>pharmacis_panale</title>
+    <title>pharmacist_panale</title>
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
@@ -42,7 +56,7 @@
                     <!-- Profile -->
                     <div class="ht-right">
                          <a href="login.php" class="login-panel"><i class="fa fa-user" style="width:50px;"></i></a>
-                          <a href=".." class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
+                          <a href="../logout.php" class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
                     <div class="lan-selector">
                     </div>
                     </div>
@@ -58,7 +72,7 @@
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="index.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Category</span></a>
+                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="fa fa-window-maximize"></i><span class="hide-menu">Category</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="Store.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Store</span></a>
                         </li>
@@ -66,18 +80,11 @@
                         </li>
                         <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">oders</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="prescription.php" aria-expanded="false"><i class="fa fa-newspaper-o"></i><span class="hide-menu">prescription</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="home_page_eddit.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Page customization</span></a>
-                        </li>
                     </ul>
                 </nav>
             </div>
             <!-- Bottom points-->
-            <div class="sidebar-footer">
-                <a href="" class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings"></i></a>
-                <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
-                <a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a> </div>
+            
         </aside>
         <!-- End Sidebar scroll-->
        
@@ -94,51 +101,86 @@
                     </div>
                 </div>
         <!-- End Page wrapper  -->
+        
+
+        <!--End admin my account update-->
+        <?php
+            
+
+            $pharmacist_id = $_SESSION["pharmacist_id"];
+
+            $accountsql = "SELECT * FROM user WHERE `user_id` ='$pharmacist_id' ";
+            $result = mysqli_query($connection, $accountsql); //executing
+            $row = mysqli_fetch_assoc($result);
+            
+            if(mysqli_num_rows($result) > 0)
+
+            {
+                $first_name = $row['first_name'];
+                $last_name =$row['last_name'];
+                $email =$row['e_mail'];
+                $phone_number =$row['phone_number'];
+                $address =$row['address'];
+                $city =$row['city'];
+            }
+
+        ?>
            
         <!-- my account -->
-               
-                <h2>My Account</h2>
+        <div class="card">
+            <div class="container">
+                <div class="row">   
+                    <div class="col-md-9 register-right">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <h2 class>My Account</h2>
+                                <form method="POST" action="" enctype="multipart/form-data">
 
-                <form method="POST" action="" enctype="multipart/form-data">
-
-                <form>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                        <label for="inputfirstName">First name</label>
-                        <input type="text" class="form-control" placeholder="first Name *" required/>
-                        </div>
-                        <div class="form-group col-md-6">
-                        <label for="inputlastName">Last name</label>
-                        <input type="text" class="form-control" placeholder="Last Name *" required/>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                        <label for="inputEmail4">E_mail</label>
-                        <input type="email" class="form-control"  placeholder="E_mail *" required/>
-                        </div>
-                        <div class="form-group col-md-6">
-                        <label for="inputmobilenumber">Mobile number</label>
-                        <input type="text" class="form-control" placeholder="E_mail *" required/>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputAddress">Address</label>
-                        <input type="text" class="form-control" placeholder="E_mail *" required/>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                        <label for="inputpassword">Password</label>
-                        <input type="password" class="form-control" placeholder="E_mail *" required/>
-                        </div>
-                    </div>
-                </form>
+                                <div class="row register-form">
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                        <b><label for="username">First name</label></b>
+                                            <input type="text" value="<?php echo $first_name;?>" name="first_name" class="form-control"   disabled/>
+                                        </div>
+                                        <div class="form-group">
+                                        <b><label for="username">Last name</label></b>
+                                            <input type="text" value="<?php echo $last_name;?>" name="item_name" class="form-control"   disabled/>
+                                        </div>
+                    
+                                        <div class="form-group">
+                                        <b><label for="username">Email</label></b>
+                                            <input type="text" value="<?php echo $email;?>" name="address"  class="form-control"   disabled/>    
+                                        </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                        <div class="form-group">
+                                        <b><label for="username">Mobile number</label></b>
+                                            <input type="text" value="<?php echo $phone_number;?>" name="phone_number" class="form-control"  disabled/>
+                                        </div>
+                                        <div class="form-group">
+                                        <b><label for="username">Address</label></b>
+                                            <input type="text" value="<?php echo $address;?>" name="address"  class="form-control"   disabled/>
+                                        </div>
+                                        <div class="form-group">
+                                        <b><label for="username">City</label></b>
+                                            <input type="text" value="<?php echo $city;?>" class="form-control" name="city"  disabled>
+                                          </div>
+                                        <div class="form-group">
+                                        <div class="switch-login">
+                                        <a href="eddit_profile.php" class="btn btn-danger">EDDIT PROFILE</a>
+                                        <a href="change_user_password.php" class="btn btn-danger">CHANGE PASSWORD</a>
+                                        
+                                        </div>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>  
+                    </div>            
                 </div>
-                </div>
-                </div>
-                </div>
-                </div>
+            </div>  
+        </div>   
+    </div>
 
 
 

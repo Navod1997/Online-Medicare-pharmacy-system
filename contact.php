@@ -1,3 +1,16 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["email"])){
+    
+    
+}
+else{
+    header("location:home_page.php");
+}
+?>
 
 <!DOCTYPE html>
 <html>
@@ -37,33 +50,44 @@
          <nav class="navbar navbar-custom navbar-expand-md ">
             <div class="container">
                 <div class="ht-left">
-                    <div class="mail-service">
-                        <i class=" fa fa-envelope"></i>
-                        Medicarepharmacy@gmail.com
-                    </div>
-                    <div class="phone-service">
-                       <i class=" fa fa-envelope"></i>
-                       +971 524 518
-                    </div>
                 </div>
-                <div class="ht-right">
-                    <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
-                    <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <?php
+                if(isset($_SESSION["first_name"]) && $_SESSION["first_name"]!=""){
+                    $name= $_SESSION["first_name"];
+
+                    echo '<div class="ht-right">
+                    <a href="my_account.php" class="login-panel">'.$name.'</a>
+                    <a href="logout.php" class="login-panel"><i class="fa fa-sign-out"></i></a>
                     <div class="lan-selector">
                     </div>
+                    </div>';
+                    
+                }else
+                {
+                echo'<div class="ht-right">
+                <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
+                <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <div class="lan-selector">
                 </div>
+            </div>
+        </div>';
+                
+             } ?>
             </div>
         </div>
 
 
         <!-- search nave -->
         
-            <div class="inner-header">
+        <div class="inner-header">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                <div class="row align-items-center">
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
                             <a href="home_page.php">
-                                <img src="img\slidephoto\logo1.png" alt="">
+                                <img src="img\slidephoto\logo1.png" alt="Medicare online pharmacy">
                             </a>
                         </div>
                     </div>
@@ -74,20 +98,24 @@
                                 <button type="button"><i class="ti-search"></i></button>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <div class="col-lg-3 text-right col-md-3">
                         <ul class="nav-right">
-                        <button type="button" class="btn btn-primary"> <a href="Prescription.php">prescrption</button>            
+                        <a href="Prescription.php">
+                        <img src="https://img.icons8.com/fluency-systems-filled/22/null/file-prescription.png"alt="Uplod Prescription"/>
+                            </a>           
                             <li class="cart-icon">
-                                <a href="check-out.php">
-                                    <i class="icon_bag_alt"></i>
+                                <a href="Add_to_card.php">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+    </div> 
 
 <!-- catogory -->        
 <div class="nav-item">
@@ -97,9 +125,9 @@
                 <nav class="nav-menu mobile-menu">
                     <ul>
                     <li><a href="medicine_list.php?type=Medicine">Medicine</a></li>
-                        <li><a href="medicine_list.php?type=Mediacal Divice">Mediacal device</a></li>
-                        <li><a href="medicine_list.php?type=Wellenss">Wellenss</a></li>
-                        <li><a href="medicine_list.php?type=Aurwedha">Aurwedha</a> </li>
+                        <li><a href="medicine_list.php?type=Mediacal Divice">Medical device</a></li>
+                        <li><a href="medicine_list.php?type=Wellenss">Wellness</a></li>
+                        <li><a href="medicine_list.php?type=Aurwedha">Ayurveda</a> </li>
                         <li><a href="medicine_list.php?type=Personal Care">Personal Care</a></li>
                         <li><a href="medicine_list.php?type=Other">Other</a></li>
                         </li>
@@ -127,7 +155,7 @@
     <!-- Breadcrumb Section Begin -->
 
     <!-- Map Section Begin -->
-    <div class="map spad">
+    <!-- <div class="map spad">
         <div class="container">
             <div class="map-inner">
                 <iframe
@@ -139,7 +167,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     <!-- Map Section Begin -->
 
     <!-- Contact Section Begin -->

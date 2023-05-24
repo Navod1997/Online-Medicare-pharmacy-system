@@ -1,3 +1,17 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["pharmacist_id"])){
+    
+    
+}
+else{
+    header("location:../home_page.php");
+}
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -9,10 +23,42 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
 
-    <title>pharmacis_panale</title>
+    <title>pharmacist_panale</title>
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+    <style>
+        .imagePreview {
+        width: 120PX;
+        height: 110px;
+        background-position: center center;
+        background:url(http://bastianandre.at/giphy.gif);
+        border-color: #57247c;
+        border-top: 1px solid #a694b1;
+        border-right: 1px solid #a694b1;
+        border-left: 1px solid #a694b1;
+        /* border-bottom: 1px solid rgb(196, 90, 214); */
+        background-color:#fff;
+        background-size: cover;
+        background-repeat:no-repeat;
+        /* display: inline-block; */
+        
+        }
+        .upload{
+        display:block;
+        width: 180PX;
+        width: 120PX;
+        border-radius:0px;
+        background-color: #577366;
+        margin-top:-5px;
+        color: #ffffff;
+        }
+        
+        .imgUp{
+        margin-bottom:15px;
+        }
+    </style>
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -42,7 +88,7 @@
                     <!-- Profile -->
                     <div class="ht-right">
                          <a href="login.php" class="login-panel"><i class="fa fa-user" style="width:50px;"></i></a>
-                          <a href="my_account.php" class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
+                          <a href="../logout.php" class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
                     <div class="lan-selector">
                     </div>
                     </div>
@@ -58,26 +104,24 @@
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="index.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Category</span></a>
+                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="fa fa-window-maximize"></i><span class="hide-menu">Category</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="Store.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Store</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="users.php" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Users</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">oders</span></a>
+                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Orders</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="prescription.php" aria-expanded="false"><i class="fa fa-newspaper-o"></i><span class="hide-menu">prescription</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="home_page_eddit.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Page customization</span></a>
+                        <li> <a class="waves-effect waves-dark" href="delivery_city.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Delivery city</span></a>
                         </li>
                     </ul>
                 </nav>
             </div>
             <!-- Bottom points-->
-            <div class="sidebar-footer">
+           <!-- <div class="sidebar-footer">
                 <a href="" class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings"></i></a>
                 <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
-                <a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a> </div>
+                <a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a> </div>-->
         </aside>
         <!-- End Sidebar scroll-->
 
@@ -89,7 +133,7 @@
                     <h3 class="text-themecolor">Add category</h3>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                            <li class="breadcrumb-item"><a href="Category.phpp">Category</a></li>
+                            <li class="breadcrumb-item"><a href="Category.php">Category</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Add category</li>
                         </ol>
                     </div>
@@ -114,148 +158,125 @@
                                 <div class="row register-form">
                                 <form action="" method="POST" enctype="multipart/form-data">
 
+                                <div class="row register-form">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                           
-                                        <b><label for="username">Category Name</label></b>
+                                            <b><label for="username">Category Name</label></b>
                                             <input type="text" name="c_name" class="form-control" placeholder="Category Name" value="" required />
                                         </div>
+                                        <!--  <input type="file" name="fileToUpload" id="fileToUpload" required> -->
                                         <div class="form-group">
-                                        <b><label for="username">Catogray Type</label></b>
-                                        <select name="c_type" id="c_type" required class="custom-select" >
-                                            <option value="" >Select Category Type</option>
-                                            <option value="Medicine">Medicine</option>
-                                            <option value="Mediacal Divice">Mediacal Divice</option>
-                                            <option value="Wellenss">Wellenss</option>
-                                            <option value="Aurwedha">Aurwedha</option>
-                                            <option value="Personal Care">Personal Care</option>
-                                            <option value="Other">Other</option>
-                                        </select>
+                                            <b><label for="username">Upload image*</label></b><br>
+                                            <!-- <input type="file" name="fileToUpload" id="fileToUpload" required> -->
+                                            <div class="imgUp">
+                                                <div class="imagePreview"></div>
+                                                    <label class="btn btn-deep-purple upload">
+                                                        Upload<input type="file" class="uploadFile img" name="file" id="file_upload" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;" required>
+                                                    </label>
+                                                <p class="card-text addbanner">Your banner image should be 1720 * 360 pixels and a maximum size of 20mb.<p>
+                                            </div>
+                                            <div class="row" style="padding:10px;">
+                                                <input type="submit" name="submit" value="Add Category" style="background-color: #55acee;" class="btn btn-danger">
                                         </div>
-                                        
+                                        </div>  
                                     </div>
-                                   
-
                                     <div class="col-md-6">
-
-                                  <!--  <input type="file" name="fileToUpload" id="fileToUpload" required> -->
-
-                                  <input type="file" name="fileToUpload" id="fileToUpload" required> <br>
-                                   
-                                    
-
-                                    <div class="row" style="padding:50px;">
-                                        <input type="submit" name="submit" value="Add Category" class="btn btn-danger">
+                                        <div class="form-group">
+                                        <b><label for="username">Category Type*</label></b>
+                                                <select class="form-control" select name="c_type" id="c_type" required class="custom-select" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                                                    <option class="hidden"  selected disabled>Please Select Category</option>
+                                                    <option value="Medicine">Medicine</option>
+                                                    <option value="Mediacal Divice">Medical Device</option>
+                                                    <option value="Wellenss">Wellness</option>
+                                                    <option value="Aurwedha">Ayurwedha</option>
+                                                    <option value="Personal Care">Personal Care</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                        </div>
                                     </div>
+                                </div>
+                                </form>
+                                    <?php 
+                                    // Check if image file is a actual image or fake image
+                                    if(isset($_POST["submit"])) {
 
+                                        $target_dir = "../items/";
+                                        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+                                        $uploadOk = 1;
+                                        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
+                                        $check = getimagesize($_FILES["file"]["tmp_name"]);
+                                        if($check !== false) {
+                                            echo "File is an image - " . $check["mime"] . ".";
+                                            $uploadOk = 1;
+                                        } else {
+                                            echo "File is not an image.";
+                                            $uploadOk = 0;
+                                        }
+                                        
+                                        // Check if file already exists
+                                    if (file_exists($target_file)) {
+                                        echo "Sorry, file already exists.";
+                                        $uploadOk = 0;
+                                        }
 
-                                    </div>
+                                        // Check file size
+                                        // Allow certain file formats
+                                        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                                        && $imageFileType != "gif" ) {
+                                        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                                        $uploadOk = 0;
+                                        }
 
-                                            </form>
+                                        // Check if $uploadOk is set to 0 by an error
+                                        if ($uploadOk == 0) {
+                                        echo "Sorry, your file was not uploaded.";
+                                        // if everything is ok, try to upload file
+                                        } else {
 
-                                            
-                                            <?php 
+                                        if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
+                                            echo "The file ". htmlspecialchars( basename( $_FILES["file"]["name"])). " has been uploaded.";
 
+                                            $imgpath = "". htmlspecialchars( basename( $_FILES["file"]["name"])); 
+                                        
+                                            if(!empty($_POST["c_type"] && $_POST["c_name"])){
+
+                                                $c_type  = $_POST["c_type"];
+                                                $c_name  = $_POST["c_name"];
+
+                                                echo '<br>';
+                                                echo $c_name;
+                                                echo '<br>';
+
+                                                echo $c_type;
+                                                echo '<br>';
+
+                                                echo $imgpath;
+
+                                                include 'db_connection.php';
+
+                                                $sql = "INSERT INTO category (c_name, c_type, image_path)
+                                                VALUES('".$c_name."', '".$c_type."', '".$imgpath."')" ;
                                                 
+                                                        if ($connection->query($sql) === TRUE) {
+                                                            echo '<script>swal("New item add success!", "New item add success!", "success").then (function(){
+                                                                window.location = "Category.php" ;
+                                                            });
+                                                                </script>';
+                                                        } else {
+                                                        echo "Error: " . $sql . "<br>" . $connection->error;
+                                                        }
 
-                                            // Check if image file is a actual image or fake image
-                                            if(isset($_POST["submit"])) {
-
-                                                $target_dir = "category/";
-                                                $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-                                                $uploadOk = 1;
-                                                $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
-                                                $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                                                if($check !== false) {
-                                                    echo "File is an image - " . $check["mime"] . ".";
-                                                    $uploadOk = 1;
-                                                } else {
-                                                    echo "File is not an image.";
-                                                    $uploadOk = 0;
-                                                }
-                                                
-
-                                                // Check if file already exists
-                                            if (file_exists($target_file)) {
-                                                echo "Sorry, file already exists.";
-                                                $uploadOk = 0;
-                                                }
-
-                                                // Check file size
-                                            
-
-                                                // Allow certain file formats
-                                                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-                                                && $imageFileType != "gif" ) {
-                                                echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                                                $uploadOk = 0;
-                                                }
-
-                                                // Check if $uploadOk is set to 0 by an error
-                                                if ($uploadOk == 0) {
-                                                echo "Sorry, your file was not uploaded.";
-                                                // if everything is ok, try to upload file
-                                                } else {
-
-                                                if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-                                                    echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
-
-                                                    $imgpath = "category/". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"]));
-                                                
-                                                    if(!empty($_POST["c_type"] && $_POST["c_name"])){
-
-                                                        $c_type  = $_POST["c_type"];
-                                                        $c_name  = $_POST["c_name"];
-
-
-
-                                                        echo '<br>';
-                                                        echo $c_name;
-                                                        echo '<br>';
-
-                                                        echo $c_type;
-                                                        echo '<br>';
-
-                                                        echo $imgpath;
-
-                                                        include 'db_connection.php';
-
-                                                        $sql = "INSERT INTO category (c_name, c_type, image_path)
-                                                        VALUES('".$c_name."', '".$c_type."', '".$imgpath."')" ;
-                                                        
-                                                                if ($connection->query($sql) === TRUE) {
-                                                                echo "New record created successfully";
-                                                                } else {
-                                                                echo "Error: " . $sql . "<br>" . $connection->error;
-                                                                }
-
-                                                                $connection->close();
-
-
-
-                                                    }
-                                                
-                                                
-
-                                                
-
-
-                                                } else {
-                                                    echo "Sorry, there was an error uploading your file.";
-                                                }
-                                                }
-
+                                                        $connection->close();
 
                                             }
 
-
-
-
-
-                                            ?>
-
+                                        } else {
+                                            echo "Sorry, there was an error uploading your file.";
+                                        }
+                                        }
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -264,14 +285,6 @@
             </div> 
         </div>   
         <!-- End store-->
-
-        <!-- footer -->
-            <footer>
-              © 2021 Medicare Online Pharmacy System Admin by Kalhara 
-            </footer>
-        </div>
-        <!-- End footer -->
-
     
     <!-- All Jquery -->
     <script src="assets/plugins/jquery/jquery.min.js"></script>
@@ -279,7 +292,36 @@
     <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/sidebarmenu.js"></script>
     <script src="js/custom.min.js"></script>
-
+    <script>
+         $(".imgAdd").click(function(){
+        $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-2 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
+        });
+        $(document).on("click", "i.del" , function() {
+        // 	to remove card
+        $(this).parent().remove();
+        // to clear image
+        // $(this).parent().find('.imagePreview').css("background-image","url('')");
+        });
+        $(function() {
+            $(document).on("change",".uploadFile", function()
+            {
+                    var uploadFile = $(this);
+                var files = !!this.files ? this.files : [];
+                if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+        
+                if (/^image/.test( files[0].type)){ // only image file
+                    var reader = new FileReader(); // instance of the FileReader
+                    reader.readAsDataURL(files[0]); // read the local file
+        
+                    reader.onloadend = function(){ // set image data as background of div
+                        //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
+        uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url("+this.result+")");
+                    }
+                }
+            
+            });
+        });
+    </script>
 
 </body>
 

@@ -1,3 +1,17 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["pharmacist_id"])){
+    
+    
+}
+else{
+    header("location:../home_page.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang>
 
@@ -9,17 +23,19 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
     
-    <title>pharmacis_panale</title>
+    <title>pharmacist_panale</title>
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.0/css/dataTables.bootstrap4.min.css">
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
-    <div class="preloader">
+    <!-- <div class="preloader">
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
-    </div>
+    </div> -->
 
     <!-- Main wrapper-->
     <div id="main-wrapper">
@@ -42,7 +58,7 @@
                     <!-- Profile -->
                     <div class="ht-right">
                          <a href="my_account.php" class="login-panel"><i class="fa fa-user" style="width:50px;"></i></a>
-                          <a href=".." class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
+                          <a href="../logout.php" class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
                     <div class="lan-selector">
                     </div>
                     </div>
@@ -58,19 +74,16 @@
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="index.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Category</span></a>
+                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="fa fa-window-maximize"></i><span class="hide-menu">Category</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="Store.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Store</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="users.php" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Users</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">oders</span></a>
+                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Orders</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="prescription.php" aria-expanded="false"><i class="fa fa-newspaper-o"></i><span class="hide-menu">prescription</span></a>
+                        <li> <a class="waves-effect waves-dark" href="delivery_city.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Delivery_city</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="home_page_eddit.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Page customization</span></a>
-                        </li>
-                    </ul>
                 </nav>
             </div>
         </aside>
@@ -81,32 +94,101 @@
             <div class="container-fluid">
                 <div class="row page-titles">
                     <div class="col-md-5 col-8 align-self-center">
-                    <h3 class="text-themecolor">Oders</h3>
+                    <h3 class="text-themecolor">Orders</h3>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                            <li class="breadcrumb-item active">Oders</li>
+                            <li class="breadcrumb-item active">Orders</li>
                         </ol>
                     </div>
                 </div>
         <!-- End Page wrapper  -->
            
-        <!-- category -->
+        <!-- order -->
+
+                <?php
+  
+                    $countOrders = "SELECT COUNT(CASE status WHEN 'pending' THEN 1 ELSE NULL END) AS pending, COUNT(CASE status WHEN 'reject' THEN 1 ELSE NULL END) AS reject, COUNT(CASE status WHEN 'accept' THEN 1 ELSE NULL END) AS accept, COUNT(CASE status WHEN 'deliver' THEN 1 ELSE NULL END) AS deliver FROM `orders`";
+                    $countOrdersResult = mysqli_query($connection, $countOrders);
+                    $checkResult = mysqli_fetch_assoc($countOrdersResult);
+
+                    if(mysqli_num_rows($countOrdersResult)>0){
+                        
+                        $pending = $checkResult['pending'];
+                        $accept = $checkResult['accept'];
+                        $deliver = $checkResult['deliver'];
+                        $reject = $checkResult['reject'];
+                    }
+
+               
+
+                ?>  update user count card data end
+
+                <div class="row"> 
+                    <div class="card-topic ms-3">
+                    </div>
+                    <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                        <div class="card text-white bg-primary mx-3 my-3">
+                            <div class="card-header text-primary">Pending orders</div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                                    <p><?php echo  $pending ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                        <div class="card text-white bg-success mx-3 my-3">
+                            <div class="card-header text-success">Accept orders</div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                                    <p><?php echo  $accept ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                        <div class="card text-white bg-danger mx-3 my-3">
+                            <div class="card-header text-danger">Deliver orders</div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                                    <p><?php echo $deliver ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                    <div class="card text-white bg-primary mx-3 my-3">
+                        <div class="card-header text-primary">Reject order</div>
+                        <div class="card-body">
+                            <div class="card-title">
+                                <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                                <p class="mx-auto ms-4"><?php echo $reject ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div> 
+
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="card">
+                    <div class="card-block">   
                             <div class="col-md-7 col-4 align-self-center"></div>
                             <div class="card-block"> 
-                                <h4 class="card-title">All Oders</h4>
+                                <h4 class="card-title">All Orders</h4>
                                 <div class="table-responsive" style="height: 400px;overflow: scroll;">
-                                    <table class="table">
+                                    <table class="table table-striped table-responsive-md table-bordered my-5" style="width:100%" id="table">
                                         <thead>
                                             <tr>
                                                 
-                                                <th>Oders Id</th>
-                                                <th>custmer Name</th>
-                                                <th>oders</th>
+                                                <th>Orders Id</th>
+                                                <th>Date and Time</th>
+                                                <th>Orders Type</th>
+                                                <th>Orders</th>
                                                 <th>Status</th>
-                                                <th>Remove</th>
+                                                <th>Delivery type</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -118,21 +200,22 @@
 
 
 
-                                                $sql = "SELECT o_name, c_id, image_path FROM oders"; 
+                                                $sql = "SELECT * FROM orders"; 
                                                 $result = mysqli_query($connection, $sql);
 
                                                 if($result->num_rows>0){
                                                     while($row=$result->fetch_assoc()){
-                                                        //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
+                                                        $id = $row["order_id"];
 
                                                 echo    
                                                         ' 
                                                         <tr>
-                                                            <td>'.$row[""] .'</td>
-                                                            <td>'.$row[""] .'</td>
-                                                            <td>'.$row[""] .'</td>
-                                                            <td><i class="mdi mdi-table"></i></td>
-                                                            <td><i class="fa fa-trash"></i></td>
+                                                            <td>'.$row["order_id"] .'</td>
+                                                            <td>'.$row["date_and_time"] .'</td>
+                                                            <td>'.$row["orderType"] .'</td>
+                                                            <td class="btnSelect">  <a href="#"><i class="mdi mdi-table"></i></a> </td>
+                                                            <td>'.$row["status"] .'</td>
+                                                            <td>'.$row["delivery_type"] .'</td>
                                                                 
                                                         </tr> 
                                                         
@@ -167,13 +250,13 @@
                     </div>
                 </div>
             </div>    
-        <!-- End category-->
+        <!-- End order-->
 
         <!-- footer -->
-            <footer class="footer">
+            <!-- <footer class="footer">
                © 2021 Medicare Online Pharmacy System Admin by Kalhara
             </footer>
-        </div>
+        </div> -->
         <!-- End footer -->
 
     
@@ -183,6 +266,49 @@
     <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/sidebarmenu.js"></script>
     <script src="js/custom.min.js"></script>
+     <!-- javascript libraries -->
+     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.0/js/dataTables.bootstrap4.min.js"></script>
+    <!-- <script src="../assets/js/jquery-3.2.1.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  
+
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable();
+        } );
+
+    </script>
+    
+    <script>
+        $(document).ready(function(){
+
+            // code to read selected table row cell data (values).
+            $("#table").on('click','.btnSelect',function(){
+                // get the current row
+                var currentRow=$(this).closest("tr"); 
+                
+                var id=currentRow.find("td:eq(0)").text(); // get current row 1st TD value
+                //var col2=currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+                var OrderType=currentRow.find("td:eq(2)").text(); // get current row 3rd TD
+                //var data=col1+"\n"+"\n"+col3;
+
+                if(OrderType == 'prescription'){
+                    window.location.href = 'view_prescription.php?id='+id;
+                }else{
+                    window.location.href = 'view_oder.php?id='+id;
+                }
+                
+                //alert(data);
+            });
+        });
+    </script>
+
 </body>
 
 </html>

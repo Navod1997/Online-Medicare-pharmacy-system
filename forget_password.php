@@ -1,3 +1,10 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -21,6 +28,7 @@
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 </head>
 
 <body>
@@ -35,28 +43,38 @@
          <nav class="navbar navbar-custom navbar-expand-md ">
             <div class="container">
                 <div class="ht-left">
-                    <div class="mail-service">
-                        <i class=" fa fa-envelope"></i>
-                        Medicarepharmacy@gmail.com
-                    </div>
-                    <div class="phone-service">
-                        <i class="fa fa-phone" aria-hidden="true"></i>
-                        +971524518
-                    </div>
                 </div>
-                <div class="ht-right">
-                    <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
-                    <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <?php
+                if(isset($_SESSION["first_name"]) && $_SESSION["first_name"]!=""){
+                    $name= $_SESSION["first_name"];
+
+                    echo '<div class="ht-right">
+                    <a href="my_account.php" class="login-panel">'.$name.'</a>
+                    <a href="logout.php" class="login-panel"><i class="fa fa-sign-out"></i></a>
                     <div class="lan-selector">
                     </div>
+                    </div>';
+                    
+                }else
+                {
+                echo'<div class="ht-right">
+                <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
+                <div class="lan-selector">
                 </div>
+            </div>
+        </div>';
+                
+             } ?>
             </div>
         </div>
 
 
         <!-- search nave -->
         
-            <div class="inner-header">
+        <div class="inner-header">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                <div class="row align-items-center">
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
@@ -66,27 +84,30 @@
                         </div>
                     </div>
                     <div class="col-lg-7 col-md-7">
-                        <div class="advanced-search">
-                            
+                        <div class="advanced-search">   
                             <div class="input-group">
-                                <input type="text" placeholder="What do you need?">
-                                <button type="button"><i class="ti-search"></i></button>
+                                <!-- <input type="text" placeholder="Search">
+                                <button type="button"><i class="ti-search"></i></button> -->
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <div class="col-lg-3 text-right col-md-3">
                         <ul class="nav-right">
-                        <button type="button" class="btn btn-primary"> <a href="Prescription.php">prescrption</button>            
+                        <a href="Prescription.php">
+                                <img src="img\slidephoto\UPLOAD YOUR.png" width="180" height="50" alt="Upload your Prescription" >
+                            </a>           
                             <li class="cart-icon">
-                                <a href="check-out.php">
-                                    <i class="icon_bag_alt"></i>
+                                <a href="Add_to_card.php">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+    </div> 
 
 <!-- catogory -->        
 <div class="nav-item">
@@ -96,9 +117,9 @@
                 <nav class="nav-menu mobile-menu">
                     <ul>
                     <li><a href="medicine_list.php?type=Medicine">Medicine</a></li>
-                        <li><a href="medicine_list.php?type=Mediacal Divice">Mediacal device</a></li>
-                        <li><a href="medicine_list.php?type=Wellenss">Wellenss</a></li>
-                        <li><a href="medicine_list.php?type=Aurwedha">Aurwedha</a> </li>
+                        <li><a href="medicine_list.php?type=Mediacal Divice">Medical device</a></li>
+                        <li><a href="medicine_list.php?type=Wellenss">Wellness</a></li>
+                        <li><a href="medicine_list.php?type=Aurwedha">Ayurveda</a> </li>
                         <li><a href="medicine_list.php?type=Personal Care">Personal Care</a></li>
                         <li><a href="medicine_list.php?type=Other">Other</a></li>
                         </li>
@@ -127,29 +148,86 @@
     <!-- Breadcrumb Form Section Begin -->
 
     <!-- Register Section Begin -->
-    <div class="register-login-section spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="login-form">
-                        <h2>Forget Password</h2>
-                        <form action="#">
-                            <div class="group-input">
-                                <label for="username"> email address *</label>
-                                <input type="text" name="e_mail" id="e_mail">
-                            </div>
-                            <div class="group-input">
-                                <label for="pass">New Password *</label>
-                                <input type="text" name="password" id="pass">
-                            </div>
-                            <button type="submit" class="site-btn login-btn">Reset password</button>
-                        </form>
+    
+    <div class="container">
+        
+                    <div class="row">
+                    <div class="col-md-6  col-lg-5 col-sm-12 mx-auto offset-md-4">
+                    <h3>Forgot your password?</h3>
+                        <div class="login-form bg-light mt-4 p-4">
+                            <form action="" method="POST" class="row g-3 needs-validation" autocomplete="off" novalidate>
+                                <p class="m-2 p-2">Enter your email address below and we’ll send you a link to reset your password</p>
+                                <div class="col-12 mt-1 mb-2">
+                                    <label for="password" class="form-label">Enter your Email</label>
+                                    <input type="text" class="form-control" name="email" id="email" minlength="8" maxlength="25"  required>
+                                </div>
+                                <div class="col-12 mt-2 ">
+                                    <button type="submit" name="submit" onclick="return checkpassword()" class="site-btn login-btn">Submit</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                        </div>
     </div>
+    <br><br>
     <!-- Register Form Section End -->
+
+
+    <?php
+
+            //user has clicked submit or not
+            if(isset($_POST['submit'])){
+                
+                //select the user is active or not
+                $email = $_POST['email'];
+
+                $sql = "SELECT * FROM user WHERE e_mail = '$email'";
+                $result = mysqli_query($connection, $sql);
+                $checkResult = mysqli_num_rows($result);
+
+                //check user availabled or not in database(Registered user)
+                if($checkResult > 0){
+
+                    // $code = 12345;
+                    $code = rand(10000,99999);
+                    $_SESSION['otpCode'] = $code;
+                    $_SESSION['otpEmail'] = $_POST['email'];
+                    //send mail
+                    include("./mail/sendmail.php");                    
+
+                    //load send code modal
+                    echo '
+                    <script>
+                        swal({
+                            title: "Success!",
+                            text: "OTP has been sent,Check Your Email!",
+                            icon: "success",
+                            button: "OK!",
+                        }).then(function(){
+                                window.location = "resetPassword.php";
+                            });
+                    </script>
+                    ';
+                }
+
+                else{
+                    
+                    echo '
+                    <script>
+                        swal({
+                            title: "Error",
+                            text: "Enter Valid Email!",
+                            icon: "error",
+                            button: "OK!",
+                        });
+                    </script>
+                    ';
+                }
+            }
+
+
+        ?>
+
 
     <!-- Footer Section Begin -->
     <footer class="footer-section">

@@ -1,5 +1,42 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["email"])){
+    
+    
+}
+else{
+    header("location:home_page.php");
+}
+?>
+
+
+<?php
+            
+
+            $user_id = $_SESSION["user_id"] ;
+
+            $sql = "SELECT * FROM user WHERE `user_id` ='$user_id' ";
+            $result = mysqli_query($connection, $sql); //executing
+            $row = mysqli_fetch_assoc($result);
+            
+            if(mysqli_num_rows($result) > 0)
+
+            {
+                $first_name = $row['first_name'];
+                $last_name =$row['last_name'];
+                $email =$row['e_mail'];
+                $phone_number =$row['phone_number'];
+                $address =$row['address'];
+                $city =$row['city'];
+            }
+
+?>
+
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="">
 
 <head>
     <meta charset="UTF-8">
@@ -29,10 +66,10 @@
         <div class="loader"></div>
     </div>
 
-     <!-- Header Section Begin -->
-     <div class="navb1">
+    <!-- Header Section Begin -->
+    <div class="navb1">
         <div class="header-top ">
-         <nav class="navbar navbar-custom navbar-expand-md ">
+        <nav class="navbar navbar-custom navbar-expand-md ">
             <div class="container">
                 <div class="ht-left">
                     <div class="mail-service">
@@ -44,71 +81,31 @@
                         +971524518
                     </div>
                 </div>
-                <div class="ht-right">
-                    <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
-                    <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <?php
+                if(isset($_SESSION["first_name"]) && $_SESSION["first_name"]!=""){
+                    $name= $_SESSION["first_name"];
+
+                    echo '<div class="ht-right">
+                    <span class="text-dark">Welcome!</span><a class="text-white" href="my_account.php" class="login-panel">'.$name.'</>
+                    <a href="logout.php" class="login-panel"><i class="fa fa-sign-out"></i></a>
                     <div class="lan-selector">
                     </div>
+                    </div>';
+                    
+                }else
+                {
+                echo'<div class="ht-right">
+                <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
+                <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <div class="lan-selector">
                 </div>
+                ';
+                    
+                } 
+                ?>
             </div>
         </div>
 
-
-        <!-- search nave -->
-        
-            <div class="inner-header">
-                <div class="row">
-                    <div class="col-lg-2 col-md-2">
-                        <div class="logo">
-                            <a href="home_page.php">
-                                <img src="img\slidephoto\logo1.png" alt="Medicare online pharmacy">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-7 col-md-7">
-                        <div class="advanced-search">
-                            
-                            <div class="input-group">
-                                <input type="text" placeholder="What do you need?">
-                                <button type="button"><i class="ti-search"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 text-right col-md-3">
-                        <ul class="nav-right">
-                        <button type="button" class="btn btn-primary"> <a href="Prescription.php">prescrption</button>            
-                            <li class="cart-icon">
-                                <a href="check-out.php">
-                                    <i class="icon_bag_alt"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<!-- catogory -->        
-<div class="nav-item">
-            <div class="container">
-                <div class="nav-depart">
-</div>
-                <nav class="nav-menu mobile-menu">
-                    <ul>
-                    <li><a href="medicine_list.php?type=Medicine">Medicine</a></li>
-                        <li><a href="medicine_list.php?type=Mediacal Divice">Mediacal device</a></li>
-                        <li><a href="medicine_list.php?type=Wellenss">Wellenss</a></li>
-                        <li><a href="medicine_list.php?type=Aurwedha">Aurwedha</a> </li>
-                        <li><a href="medicine_list.php?type=Personal Care">Personal Care</a></li>
-                        <li><a href="medicine_list.php?type=Other">Other</a></li>
-                        </li>
-                    </ul>
-                </nav>
-                <div id="mobile-menu-wrap"></div>
-            </div>
-        </div>
-    </header>
-    <!-- catogory End -->
 
 
     <!-- Breadcrumb Section Begin -->
@@ -117,125 +114,84 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="#"><i class="fa fa-home"></i> Home</a>
-                        <span>My Account</span>
+                        <a href="home_page.php"><i class="fa fa-home"></i> Home</a>
+                        <div class="col-lg-5 offset-lg-5">     
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Breadcrumb Form Section Begin -->
-
-    <!-- Register Section Begin -->
-    <div class="register-login-section spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="login-form">
-
-
-
-                    <?php
-
-
-                        include 'db_connection.php';
-
-                        $id = $_GET["id"];
-
-                        $sql = "SELECT * FROM user WHERE user_id = '".$id."' "; 
-                        $result = mysqli_query($connection, $sql);
-
-                        if($result->num_rows>0){
-                            while($row=$result->fetch_assoc()){
-                                //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
-                                    $id = $row["user_id"];
-                           
-                                
-                               
-                               echo  $first_name = $row["first_name_name"]  ;   
-                               echo  $last_name = $row["last_name"];
-                               echo  $e_mail =  $row["e_mail"];
-                               echo  $phone_number= $row["phone_number"];
-                               echo  $address = $row["address"];
-                               echo  $password = $row["password"];
-                              // echo  $status=$row["status"].'<br>' ;
-                             //  echo  $last_update=$row["last_update"].'<br>';
-                                   
-                                        
-                               
-                                
-                                
-
-
-                            }
-
-
-
-                        }
-                        else{
-
-                            echo "no result found";
-                            //echo '<script>alert("No Results Found");</script>';
-                        }
-                        $connection->close();
-
-
-
-
-
-
-                        ?>
-                   
-
-
-
-
-
-                        <h2>My Account</h2>
-
-                        <form method="POST" action="" enctype="multipart/form-data">
-
-                        <input type="text" name="id" id="" value=<?php echo $_GET["id"]; ?> />
-                      
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                <label for="inputfirstName">First name</label>
-                                <input type="text" class="form-control" placeholder="first Name *" value=<?php echo $first_name; ?> required/>
+    <div class="row">
+    <div class="col-sm-4 col-lg-3">
+        <nav id="navbar-example3" class="navbar navbar-text-dark bg-light flex-column mt-4" wit>
+        <a class="navbar-brand" href="#item-1">My Account</a>
+        <a class="navbar-brand" href="my_oder.php">My Order</a>
+        <!-- <a class="navbar-brand" href="#item-3">Navbar</a> -->
+            </nav>
+        </nav>
+        </nav>
+    </div>
+  
+  
+    <div class="col-sm-6 col-lg-7">
+        <div data-spy="scroll" class="scrollspy-example z-depth-1 mt-4" data-target="#navbar-example3" data-offset="0">
+            <div class="register-login-section spad">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 offset-lg-3">
+                        <div class="register-form">
+                            <h2>My Account</h2>
+                            <form method="POST" action="" >
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                    <label for="inputEmail4">First name</label>
+                                    <input type="text" value="<?php echo $first_name;?>" class="form-control" name="first_name" id="first_name" disabled>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                    <label for="inputPassword4">Last name</label>
+                                    <input type="text" value="<?php echo $last_name;?>" class="form-control" name="last_name" id="last_name" disabled>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                <label for="inputlastName">Last name</label>
-                                <input type="text" class="form-control" placeholder="Last Name *" value=<?php echo $last_name; ?> required/>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                    <label for="inputEmail4">E_mail</label>
+                                    <input type="email" value="<?php echo $email;?>" class="form-control" name="e_mail" id="e_mail" disabled>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                    <label for="inputPassword4">Mobile number</label>
+                                    <input type="text" value="<?php echo $phone_number;?>" class="form-control" name="phone_number" id="phone_numbe" disabled>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                <label for="inputEmail4">E_mail</label>
-                                <input type="email" class="form-control"  placeholder="E_mail *" value=<?php echo $e_mail; ?> required/>
+                                <div class="form-group">
+                                    <label for="inputAddress2">Address</label>
+                                    <input type="text" value="<?php echo $address;?>" class="form-control" name="address" id="address" disabled>
+                                </div>   
+                                <div class="form-group">
+                                    <label for="inputAddress2">City</label>
+                                    <input type="text" value="<?php echo $city;?>" class="form-control" name="city" id="city" disabled>
                                 </div>
-                                <div class="form-group col-md-6">
-                                <label for="inputmobilenumber">Mobile number</label>
-                                <input type="text" class="form-control" placeholder="E_mail *" value=<?php echo $phone_number; ?> required/>
+                                <div class="form-row">
+                                    <div class="form-group col-md-5.5">
+                                        <a href="eddit_acount.php" class="primary-btn pd-cart">EDDIT PROFILE</a>
+                                    </div>
+                                    <div class="form-group col-md-6.5">
+                                        <a href="change_password.php" class="primary-btn pd-cart">CHANGE PASSWORD</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputAddress">Address</label>
-                                <input type="text" class="form-control" placeholder="E_mail *" value=<?php echo $e_mail; ?> required/>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                <label for="inputpassword">Password</label>
-                                <input type="password" class="form-control" placeholder="E_mail *" value=<?php echo $password; ?> required/>
-                                </div>
-                            </div>
-                            <button type="submit" class="site-btn login-btn">submit</button>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
+            </div> 
             </div>
         </div>
+        </div>
     </div>
+
+    
+
     <!-- Register Form Section End -->
 
     <!-- Footer Section Begin -->
@@ -266,7 +222,7 @@
                         <ul>
                             <li><a href="#">About Us</a></li>
                             <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="contact.php">Contact</a></li>
                             <li><a href="#">Serivius</a></li>
                         </ul>
                     </div>
@@ -276,7 +232,7 @@
                         <h5>My Account</h5>
                         <ul>
                             <li><a href="#">My Account</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="contact.php">Contact</a></li>
                             <li><a href="#">Shop</a></li>
                         </ul>
                     </div>

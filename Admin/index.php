@@ -1,3 +1,17 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["admin_id"])){
+    
+    
+}
+else{
+    header("location:../home_page.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang>
 
@@ -7,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img\slidephoto\logo2.png">
 
     <title>Admin_panale</title>
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -41,8 +55,8 @@
                     </ul>
                     <!-- Profile -->
                     <div class="ht-right">
-                         <a href="my_account.php" class="login-panel"><i class="fa fa-user" style="width:50px;"></i></a>
-                          <a href=".." class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
+                         <a href="my_account.php" class="login-panel"><i class="fa fa-user" style="width:50px;color: white;"></i></a>
+                          <a href="../logout.php" class="login-panel"><i class="fa fa-sign-out" style="width:50px;color: white;"></i></a>
                     <div class="lan-selector">
                     </div>
                     </div>
@@ -58,17 +72,15 @@
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="index.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="category.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Category</span></a>
+                        <li> <a class="waves-effect waves-dark" href="category.php" aria-expanded="false"><i class="fa fa-window-maximize"></i><span class="hide-menu">Category</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="Store.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Store</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="users.php" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Users</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">oders</span></a>
+                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Orders</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="prescription.php" aria-expanded="false"><i class="fa fa-newspaper-o"></i><span class="hide-menu">prescription</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="home_page_eddit.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Page customization</span></a>
+                        <li> <a class="waves-effect waves-dark" href="delivery_city.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Delivery city</span></a>
                         </li>
                     </ul>
                 </nav>
@@ -90,10 +102,82 @@
                 </div>
         <!-- End Page wrapper -->
 
-                <!-- Start Page Content -->
+        <!-- order -->
+
+        <!-- <h2>Orders</h2>
+
+        <?php
+  
+            $countOrders = "SELECT COUNT(CASE status WHEN 'pending' THEN 1 ELSE NULL END) AS pending, COUNT(CASE status WHEN 'reject' THEN 1 ELSE NULL END) AS reject, COUNT(CASE status WHEN 'accept' THEN 1 ELSE NULL END) AS accept, COUNT(CASE status WHEN 'deliver' THEN 1 ELSE NULL END) AS deliver FROM `orders`";
+            $countOrdersResult = mysqli_query($connection, $countOrders);
+            $checkResult = mysqli_fetch_assoc($countOrdersResult);
+
+            if(mysqli_num_rows($countOrdersResult)>0){
+                
+                $pending = $checkResult['pending'];
+                $accept = $checkResult['accept'];
+                $deliver = $checkResult['deliver'];
+                $reject = $checkResult['reject'];
+            }
+
+
+
+            ?>  update user count card data end -->
+
+            <div class="row"> 
+                <div class="card-topic ms-3">
+                </div>
+                <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                    <div class="card text-white bg-primary mx-3 my-3">
+                        <div class="card-header text-primary" style="text-align:center ;"> <img src="https://img.icons8.com/fluency/25/null/purchase-order.png"/>Pending orders</div>
+                        <div class="card-body">
+                            <div class="card-title">
+                                <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                                <p style="text-align: center;font-size:50px"><?php echo  $pending ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                    <div class="card text-white bg-success mx-3 my-3">
+                        <div class="card-header text-success" style="text-align:center ;"><img src="https://img.icons8.com/fluency/20/null/approval.png"/>Accept orders</div>
+                        <div class="card-body">
+                            <div class="card-title">
+                                <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                                <p style="text-align: center;font-size:50px"><?php echo  $accept ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                    <div class="card text-white bg-danger mx-3 my-3">
+                        <div class="card-header text-danger" style="text-align:center ;"><img src="https://img.icons8.com/fluency/25/null/shipped.png"/>Deliver orders</div>
+                        <div class="card-body">
+                            <div class="card-title">
+                                <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                                <p style="text-align: center;font-size:50px"><?php echo $deliver ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xm-12 col-sm-6 col-md-6 col-lg-3">
+                <div class="card text-white bg-primary mx-3 my-3">
+                    <div class="card-header text-primary" style="text-align:center ;"><img src="https://img.icons8.com/fluency/20/null/delete-view.png"/>Reject order</div>
+                    <div class="card-body">
+                        <div class="card-title">
+                            <p><span><i class="bi bi-people-fill card-icon"></i></span></p>
+                            <p style="text-align: center;font-size:50px"><?php echo $reject ?></p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+    
+            <!-- Start Page Content -->
                
             </div>
-            <footer class="footer"> © 2021 Medicare Online Pharmacy System Admin by Kalhara </footer>
+            <footer class="footer"> © 2022 Medicare Online Pharmacy System Admin by Kalhara </footer>
         </div>
     </div>
    

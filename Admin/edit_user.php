@@ -1,3 +1,17 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["admin_id"])){
+    
+    
+}
+else{
+    header("location:../home_page.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang>
 
@@ -13,6 +27,7 @@
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -41,8 +56,8 @@
                     </ul>
                     <!-- Profile -->
                     <div class="ht-right">
-                         <a href="login.php" class="login-panel"><i class="fa fa-user" style="width:50px;"></i></a>
-                          <a href=".." class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
+                         <a href="login.php" class="login-panel"><i class="fa fa-user" style="width:50px;color: white;"></i></a>
+                          <a href="../logout.php" class="login-panel"><i class="fa fa-sign-out" style="width:50px;color: white;"></i></a>
                     <div class="lan-selector">
                     </div>
                     </div>
@@ -58,7 +73,7 @@
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="index.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Category</span></a>
+                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="fa fa-window-maximize"></i><span class="hide-menu">Category</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="Store.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Store</span></a>
                         </li>
@@ -66,11 +81,8 @@
                         </li>
                         <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">oders</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="prescription.php" aria-expanded="false"><i class="fa fa-newspaper-o"></i><span class="hide-menu">prescription</span></a>
+                        <li> <a class="waves-effect waves-dark" href="delivery_city.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Delivery city</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="home_page_eddit.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Page customization</span></a>
-                        </li>
-                    </ul>
                 </nav>
             </div>
         </aside>
@@ -110,16 +122,17 @@
 
                         if($result->num_rows>0){
                             while($row=$result->fetch_assoc()){
-                                //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
+        
                                     $id = $row["user_id"];
                            
                                 
                                
-                               echo  $first_name = $row["first_name"]  ;   
-                               echo  $last_name= $row["last_name"];
-                               echo  $e_mail =  $row["e_mail"];
-                               echo  $phone_number= $row["phone_number"];
-                               echo  $address = $row["address"];
+                                 $first_name = $row["first_name"]  ;   
+                                 $last_name= $row["last_name"];
+                                 $e_mail =  $row["e_mail"];
+                                 $phone_number= $row["phone_number"];
+                                 $address = $row["address"];
+                                 $usertype = $row["user_type"];
                                //echo  $unit_price = $row["unit_price"];
                               // echo  $status=$row["status"].'<br>' ;
                              //  echo  $last_update=$row["last_update"].'<br>';
@@ -140,8 +153,7 @@
                             echo "no result found";
                             //echo '<script>alert("No Results Found");</script>';
                         }
-                        $connection->close();
-
+                        
 
 
 
@@ -155,6 +167,9 @@
                             <div class="table-responsive" style="height: 400px;overflow: scroll;" >
                                 <form class="form-horizontal form-material" action="" method="POST">
                                     <div class="form-group">
+
+                                    <input type="text" name="user_id" placeholder=""  class="form-control form-control-line" value=<?php echo $id; ?> hidden >
+
                                         <label class="col-md-12">First Name</label>
                                         <div class="col-md-12">
                                             <input type="text" name="first_name" placeholder=""  class="form-control form-control-line" value=<?php echo $first_name; ?> required >
@@ -188,7 +203,7 @@
                                         <label class="col-sm-12">User type</label>
                                         <div class="col-sm-12">
                                             <select class="form-control form-control-line" name="user_type" required >
-                                            <option class="hidden"  selected disabled>Please select user type</option>
+                                            <option class="hidden"  selected disabled ><?php echo $usertype; ?></option>
                                                 <option value ="pharmacist">pharmacis</option>
                                                 <option value = "rider">rider</option>
                                             </select>
@@ -196,7 +211,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <button class="btn btn-success" name="update">update</button>
+                                            <button class="btn btn-success" style="background-color: #55acee;" name="update">update</button>
                                         </div>
                                     </div>
                                 </form>
@@ -206,7 +221,7 @@
                         <?php 
                         
                         if(isset($_POST["update"])){
-                            $id = $_GET["id"]; 
+                            $id = $_POST["user_id"]; 
                             $user_type = $_POST["user_type"];
 
                             $first_name = $_POST["first_name"];
@@ -217,17 +232,17 @@
                             $user_type = $_POST["user_type"];
 
                             include 'db_connection.php';
-                            echo $user_type;
-
-                        
 
 
-
-                            $sql = "UPDATE `user` SET `first_name` = '$first_name', `last_name` = '$last_name', `e_mail` = '$e_mail', `phone_number` = '$phone_number', `address` = '$address', `user_type` = '$user_type' WHERE `user_id` = 4";
-                          //$sql = 'UPDATE `user` SET `first_name`='.$first_name.',`last_name`='.$last_name.',`e_mail`='.$e_mail.',`phone_number`='.$phone_number.',`address`='.$address.',`user_type`='.$user_type.' WHERE `user_id`='.$id.'';
+                            $sql = "UPDATE `user` SET `first_name` = '$first_name', `last_name` = '$last_name', `e_mail` = '$e_mail', `phone_number` = '$phone_number', `address` = '$address', `user_type` = '$user_type' WHERE `user_id` = '$id' ";
+                          
 
                             if ($connection->query($sql) === TRUE) {
-                                echo "Record update successfully";
+                                // echo "Record update successfully";
+                                echo '<script>swal("User eddit  success!", "Eddit user success.!", "success").then (function(){
+                                    window.location = "users.php" ;
+                                });
+                                    </script>';
                                 } else {
                                 echo "Error: " . $sql . "<br>" . $connection->error;
                                 }

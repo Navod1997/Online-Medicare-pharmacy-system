@@ -1,0 +1,48 @@
+ <?php
+
+
+                                            include 'db_connection.php';
+
+
+
+                                            $sql = "SELECT c_name, c_type, image_path FROM category"; 
+                                            $result = mysqli_query($connection, $sql);
+
+                                            if($result->num_rows>0){
+                                                while($row=$result->fetch_assoc()){
+                                                    //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
+
+                                            echo    
+                                                    ' 
+                                                    <tr>
+                                                        <td>'.$row["c_name"] .'</td>
+                                                        <td>'.$row["c_type"] .'</td>
+                                                        <td>'.$row["image_path"] .'</td>
+                                                        <td><i class="mdi mdi-table"></i></td>
+                                                        <td><i class="mdi mdi-table"></i></td>
+                                                              
+                                                    </tr> 
+                                                    
+                                                    ';
+
+
+                                                }
+
+
+                                                
+
+
+                                            }
+                                            else{
+
+                                                echo "no result found";
+                                                //echo '<script>alert("No Results Found");</script>';
+                                            }
+                                            $connection->close();
+
+
+
+
+
+
+                                        ?>

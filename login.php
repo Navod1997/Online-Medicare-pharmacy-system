@@ -27,6 +27,7 @@ session_start();
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 </head>
 
 <body>
@@ -41,28 +42,39 @@ session_start();
          <nav class="navbar navbar-custom navbar-expand-md ">
             <div class="container">
                 <div class="ht-left">
-                    <div class="mail-service">
-                        <i class=" fa fa-envelope"></i>
-                        Medicarepharmacy@gmail.com
-                    </div>
-                    <div class="phone-service">
-                        <i class="fa fa-phone" aria-hidden="true"></i>
-                        +971 524 518
-                    </div>
+                   
                 </div>
-                <div class="ht-right">
-                    <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
-                    <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                <?php
+                if(isset($_SESSION["first_name"]) && $_SESSION["first_name"]!=""){
+                    $name= $_SESSION["first_name"];
+
+                    echo '<div class="ht-right">
+                    <span class="text-dark">Welcome!</span><a class="text-white" href="my_account.php" class="login-panel">'.$name.'</>
+                    <a href="logout.php" class="login-panel"><i class="fa fa-sign-out"></i></a>
                     <div class="lan-selector">
                     </div>
+                    </div>';
+                    
+                }else
+                {
+                echo'<div class="ht-right">
+                <a href="login.php" class="login-panel"><i class="fa fa-user"></i></a>
+                <div class="lan-selector">
                 </div>
+            </div>
+        </div>';
+                
+             } ?>
             </div>
         </div>
 
 
         <!-- search nave -->
         
-            <div class="inner-header">
+        <div class="inner-header">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                <div class="row align-items-center">
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
@@ -72,27 +84,30 @@ session_start();
                         </div>
                     </div>
                     <div class="col-lg-7 col-md-7">
-                        <div class="advanced-search">
-                            
+                        <div class="advanced-search">   
                             <div class="input-group">
-                                <input type="text" placeholder="What do you need?">
-                                <button type="button"><i class="ti-search"></i></button>
+                                <!-- <input type="text" placeholder="Search">
+                                <button type="button"><i class="ti-search"></i></button> -->
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <div class="col-lg-3 text-right col-md-3">
                         <ul class="nav-right">
-                        <button type="button" class="btn btn-primary"> <a href="Prescription.php">prescrption</button>            
+                        <a href="Prescription.php">
+                        <img src="https://img.icons8.com/fluency-systems-filled/22/null/file-prescription.png"alt="Uplod Prescription"/>
+                            </a>           
                             <li class="cart-icon">
-                                <a href="check-out.php">
-                                    <i class="icon_bag_alt"></i>
+                                <a href="testcheckout.php">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+    </div> 
 
 <!-- catogory -->        
 <div class="nav-item">
@@ -102,9 +117,9 @@ session_start();
                 <nav class="nav-menu mobile-menu">
                     <ul>
                     <li><a href="medicine_list.php?type=Medicine">Medicine</a></li>
-                        <li><a href="medicine_list.php?type=Mediacal Divice">Mediacal device</a></li>
-                        <li><a href="medicine_list.php?type=Wellenss">Wellenss</a></li>
-                        <li><a href="medicine_list.php?type=Aurwedha">Aurwedha</a> </li>
+                        <li><a href="medicine_list.php?type=Mediacal Divice">Medical device</a></li>
+                        <li><a href="medicine_list.php?type=Wellenss">Wellness</a></li>
+                        <li><a href="medicine_list.php?type=Aurwedha">Ayurveda</a> </li>
                         <li><a href="medicine_list.php?type=Personal Care">Personal Care</a></li>
                         <li><a href="medicine_list.php?type=Other">Other</a></li>
                         </li>
@@ -132,40 +147,57 @@ session_start();
     </div>
     <!-- Breadcrumb Form Section Begin -->
 
-    <!-- Register Section Begin -->
+    <!-- Login Section Begin -->
+    
+
     <div class="register-login-section spad">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="login-form">
-                        <h2>Login</h2>
-                        <form action="" method="POST">
-                            <div class="group-input">
-                                <label for="username">email address *</label>
-                                <input type="text" name="e_mail" id="username">
-                            </div>
-                            <div class="group-input">
-                                <label for="pass">Password *</label>
-                                <input type="text" name='password' id="pass">
-                            </div>
-                            <div class="group-input gi-check">
-                                <div class="gi-more">
-                                    <label for="save-pass">
-                                        Save Password
-                                        <input type="checkbox" id="save-pass">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <a href="forget_password.php" class="forget-pass">Forget your Password</a>
+        <div class="card" style="border-radius:0rem;height:535px">
+            <div class="row">                
+                <div class="col-sm">
+                    <div class="card-body p-4 p-lg-5 text-black">
+                        <div class="login-form">
+                            <h2>Login</h2>
+                            <form action="" method="POST">
+                                <div class="group-input">
+                                    <label for="username">Email Address *</label>
+                                    <input type="text" name="e_mail" id="username"  required>
                                 </div>
-                            </div>
-                            <button type="submit" name="submit" class="site-btn login-btn">Sign In</button>
-                        </form>
-                        <div class="switch-login">
-                            <a href="register.php" class="or-login">Or Create An Account</a>
+                                <div class="group-input">
+                                    <label for="pass">Password *</label>
+                                    <input type="password" name='password' id="pass" class="pwd"  required >
+                                    <i class="fa fa-eye" onclick = "passwordshow()"></i>
+                                </div>
+                                <!-- <div class="group-input gi-check">
+                                    <div class="gi-more"> -->
+                                        <!-- <label for="save-pass">
+                                            Save Password
+                                            <input type="checkbox" id="save-pass">
+                                            <span class="checkmark"></span>
+                                        </label> -->
+                                        <!-- <a href="forget_password.php" class="forget-pass">Forget your Password</a> -->
+                                    <!-- </div>
+                                </div> -->
+                                <button type="submit" name="submit" class="site-btn login-btn" required>Sign In</button>
+                            </form>
+                            <!-- <div class="switch-login">
+                                <a href="register.php" class="or-login">Or Create An Account</a>
+                            </div> -->
+                            <a class="small text-muted" href="forget_password.php">Forgot password?</a>
+                            <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a
+                                    href="register.php" style="color: #393f81;">Register here</a></p>
+                            <!-- <a href="#!" class="small text-muted">Terms of use.</a>
+                            <a href="#!" class="small text-muted">Privacy policy</a> -->
                         </div>
                     </div>
                 </div>
+                <div class="col-sm">
+                    <div class="login-form">
+                        <img src="https://img.graphicsurf.com/2020/09/people-in-pharmacy-vector-illustration-768x512.jpg" class="" alt="Responsive image" style="height: 500px;">
+                    </div>
+                </div>
             </div>
+        </div>
         </div>
     </div>
 
@@ -177,19 +209,9 @@ session_start();
         if(isset($_POST['submit']))  // if button is submit
         {
             
-            $test = "12345";
-            echo md5($test);
-            echo '<br>';
-            echo "we are in ifisset ";
-            echo '<br>';
-
-            $email = $_POST["e_mail"];  // records from login form
-            $password = $_POST["password"];
-
-            echo "Email is : " .$email ." Password is :".$password ;
-            echo '<br>';
-
-            echo "Encripted password value is : ".md5($password);
+           
+            $email = $_POST['e_mail'];
+            $password = $_POST['password'];
             
             if(!empty($email))   // records were not empty
             {
@@ -197,14 +219,22 @@ session_start();
             $result=mysqli_query($connection, $loginquery); //executing
             $row=mysqli_fetch_array($result);
             
-                     if(is_array($row))
+            if ( mysqli_num_rows($result) > 0){
+
+                if(is_array($row))
                                         {
-                                 //Admin
+                                 
                                      if($row["status"]==1){
-                                                
+                                         
+                                                //Admin
                                                 if($row["user_type"]== "admin"){
-                                                    $_SESSION["email"] = $row['e_mail'];
-                                                    $SESSION["type"]= "admin";
+                                                    //$_SESSION["email"] = $row['e_mail'];
+                                                    //$_SESSION["type"]= "admin";
+                                                    //$_SESSION["first_name"]= $row['first_name'];
+                                                    //$_SESSION["last_name"] = $row['last_name'];
+                                                    //$_SESSION["phone_number"] = $row['phone_number'];
+                                                    //$_SESSION["address"] = $row['address'];
+                                                    $_SESSION["admin_id"] = $row['user_id'];
                                                     
                                                     //header("location:./admin/index.php");
                                                     echo("<script>location.href='Admin/index.php'</script>");
@@ -214,25 +244,34 @@ session_start();
                                                 //pharmacise
                                                 elseif($row["user_type"]=="pharmacist"){
                                                     $_SESSION["email"] = $row['e_mail'];
-                                                    $SESSION["type"]= "pharmacist";
+                                                    $_SESSION["type"]= "pharmacist";
+                                                    $_SESSION["pharmacist_id"] = $row['user_id'];
                                                    
                                                     //header("location:emp/index.php");
                                                     echo("<script>location.href='Pharmacist/index.php'</script>");
                                                     
                                                 }
                                                 //Driver
-                                                elseif($row["user_type"]=="drv"){
+                                                elseif($row["user_type"]=="rider"){
                                                     $_SESSION["email"] = $row['e_mail'];
-                                                    $SESSION["type"]= "drv";
+                                                    $_SESSION["type"]= "driver";
+                                                    $_SESSION["driver_id"] = $row['user_id'];
                                                    
                                                     //header("location:./dilivery/index.php");
-                                                    echo("<script>location.href='/dilivery/index.php'</script>");
+                                                    echo("<script>location.href='Rider/index.php'</script>");
                                                     
                                                 }
                                                 //User
                                                 else{
-                                                    //$_SESSION["email"] = $row['e_mail'];
-                                                   // $SESSION["type"]= "user";
+                                                    $_SESSION["email"] = $row['e_mail'];
+                                                    //$_SESSION["type"]= "user";
+                                                    $_SESSION["first_name"]= $row['first_name'];
+                                                    $_SESSION["last_name"] = $row['last_name'];
+                                                    $_SESSION["phone_number"] = $row['phone_number'];
+                                                    $_SESSION["address"] = $row['address'];
+                                                    $_SESSION["user_id"] = $row['user_id'];
+                                                    $_SESSION["city"] = $row['city'];
+
                                                    // header("location:home_page.php");
                                                    echo("<script>location.href='home_page.php'</script>");
                                                     
@@ -247,8 +286,15 @@ session_start();
                                         } 
                                     else
                                         {
-                                               echo "Invalid Email or Password!";
+                                            
                                         }
+
+            }else{
+               
+                echo '<script>swal("Error!", "Incorrect email or password!", "error");</script>';
+            }
+
+                     
             }
              
         } ?>
@@ -339,6 +385,29 @@ session_start();
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
+    
+    
+    <script>
+    function passwordshow() {
+        var $pwd = $(".pwd");
+    var eye1 = document.getElementById("eye");
+    if ($pwd.attr('type') === 'password') {
+        $pwd.attr('type', 'text');
+        eye1.classList.add("fa-eye-slash");
+        eye1.classList.remove("fa-eye");
+        showPassword = true;
+    } else {
+        $pwd.attr('type', 'password');
+        eye1.classList.remove("fa-eye-slash");
+        eye1.classList.add("fa-eye");
+        showPassword = false;
+    }
+    }
+    </script>
+
+
+
+
 
 
     

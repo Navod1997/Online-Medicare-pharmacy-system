@@ -1,3 +1,17 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["pharmacist_id"])){
+    
+    
+}
+else{
+    header("location:../home_page.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang>
 
@@ -9,10 +23,43 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
 
-    <title>pharmacis_panale</title>
+    <title>Admin_panale</title>
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+
+    <style>
+        .imagePreview {
+        width: 120PX;
+        height: 110px;
+        background-position: center center;
+        background:url(http://bastianandre.at/giphy.gif);
+        border-color: #57247c;
+        border-top: 1px solid #a694b1;
+        border-right: 1px solid #a694b1;
+        border-left: 1px solid #a694b1;
+        /* border-bottom: 1px solid rgb(196, 90, 214); */
+        background-color:#fff;
+        background-size: cover;
+        background-repeat:no-repeat;
+        /* display: inline-block; */
+        
+        }
+        .upload{
+        display:block;
+        width: 180PX;
+        width: 120PX;
+        border-radius:0px;
+        background-color: #577366;
+        margin-top:-5px;
+        color: #ffffff;
+        }
+        
+        .imgUp{
+        margin-bottom:15px;
+        }
+    </style>
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -42,7 +89,7 @@
                     <!-- Profile -->
                     <div class="ht-right">
                     <a href="my_account.php" class="login-panel"><i class="fa fa-user"></i></a>
-                    <a href=".." class="login-panel"><i class="fa fa-sign-out"></i></a>
+                    <a href="../logout.php" class="login-panel"><i class="fa fa-sign-out"></i></a>
                     <div class="lan-selector">
                     </div>
                 </div>
@@ -58,17 +105,15 @@
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="index.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Category</span></a>
+                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="fa fa-window-maximize"></i><span class="hide-menu">Category</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="Store.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Store</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="users.php" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Users</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">oders</span></a>
+                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Orders</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="prescription.php" aria-expanded="false"><i class="fa fa-newspaper-o"></i><span class="hide-menu">prescription</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="home_page_eddit.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Page customization</span></a>
+                        <li> <a class="waves-effect waves-dark" href="delivery_city.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Delivery city</span></a>
                         </li>
                     </ul>
                 </nav>
@@ -94,19 +139,12 @@
         <!-- End Page wrapper -->
         
        <!-- store -->
-       <div class="container register">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card";>
-                            <div class="col-md-7 col-4 align-self-center"></div>
-                            <div class="card-block">
-                            </div>
-                        </div>
-                    </div>
+       <div class="container">
+                <div class="row">   
                     <div class="col-md-9 register-right">
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <h3 class>Add Iteam</h3>
+                                <h2 class>Add Iteam</h2>
                                 <form method="POST" action="" enctype="multipart/form-data">
 
                                 <div class="row register-form">
@@ -117,208 +155,173 @@
                                             <input type="text" name="item_name" class="form-control" placeholder="Iteam Name *" value="" required/>
                                         </div>
                                         <div class="form-group">
-                                                            <b><label for="username">Catogray Type*</label></b>
-                                                                <select class="form-control" select name="category_type" id="category_type" required class="custom-select" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                                                                    <option class="hidden"  selected disabled>Please select Catogray</option>
+                                            <b><label for="username">Catogray Type*</label></b>
+                                                <select class="form-control" select name="category_type" id="category_type" required class="custom-select" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                                                    <option class="hidden"  selected disabled>Please select Catogray</option>
 
-                                        <?php 
+                                                    <?php 
 
-                                            include 'db_connection.php'; // connection
-                                        
-
-
-                                            $sql = "SELECT c_name FROM category "; 
-                                                $result = mysqli_query($connection, $sql);
-
-                                            
-                                                
-                                                if($result->num_rows>0){
-                                                    while($row=$result->fetch_assoc()){
-                                                        //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
-
-                                                echo    
-                                                        ' 
-                                                        
-                                                                    <option value="'.$row["c_name"].'">'.$row["c_name"].'</option>
-                                                               
-                                                        
-                                                        ';
-
-
-                                                    }
+                                                        include 'db_connection.php'; // connection
                                                     
 
 
-                                                }
-                                                else{
+                                                        $sql = "SELECT c_name FROM category "; 
+                                                            $result = mysqli_query($connection, $sql);
 
-                                                    echo "no result found";
-                                                    //echo '<script>alert("No Results Found");</script>';
-                                                }
-                                                $connection->close();
+                                                        
+                                                            
+                                                            if($result->num_rows>0){
+                                                                while($row=$result->fetch_assoc()){
+                                                                    //echo "item name:".$row["item_name"] ."unit_price:".$row["unit_price"] ."<br>" ;
+
+                                                            echo    
+                                                                    ' 
+                                                                    
+                                                                                <option value="'.$row["c_name"].'">'.$row["c_name"].'</option>
+                                                                        
+                                                                    
+                                                                    ';
+
+
+                                                                }
+                                                                
+
+
+                                                            }
+                                                            else{
+
+                                                                echo "no result found";
+                                                                //echo '<script>alert("No Results Found");</script>';
+                                                            }
+                                                          //  $connection->close();
 
 
 
-                                        ?>
+                                                    ?>
 
 
-                                                               </select>
-                                         </div>
+                                                </select>
+                                        </div>
                     
                                         <div class="form-group">
                                         <b><label for="username">Discription *</label></b>
                                             <textarea rows="5" input type="text" name="discription" class="form-control form-control-line"  value="" required></textarea>    
                                         </div>
-                                        </div>
-                                        <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                        <b><label for="username">Quntity *</label></b>
-                                            <input type="text" name="quantity" class="form-control" placeholder="Quntity *" value="" required/>
+                                            <b><label for="username">Quntity *</label></b>
+                                            <input type="text" name="quantity" class="form-control" placeholder="Quntity *" min="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" value="" required/>
                                         </div>
                                         <div class="form-group">
-                                        <b><label for="username">Unit Price *</label></b>
-                                            <input type="text" name="unit_price" minlength="1" maxlength="10" name="txtEmpPhone" class="form-control" placeholder="Unit Pricee *" value="" required/>
+                                            <b><label for="username">Unit Price *</label></b>
+                                            <input type="text" name="unit_price" minlength="1" maxlength="10" name="txtEmpPhone" class="form-control" placeholder="Unit Pricee *" oninput="this.value = this.value.replace(/[^1-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" value="" required/>
+                                        </div>
+                                        <div class="form-group">
+                                            <b><label for="username">The maximum quantity that the customer can choose  *</label></b>
+                                            <input type="text" name="o_max_qut" minlength="1" maxlength="10" maxnumber="10" name="txtEmpPhone" class="form-control" placeholder="maximum quantity *" oninput="this.value = this.value.replace(/[^1-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" value="" required/>
                                         </div>
                                         
                                         <div class="form-group">
-                                        <b><label for="username">Uplod photo *</label></b>
+                                            <b><label for="username">Uplod photo *</label></b>
                         
-                                        <!--  <input type="file" name="file_upload" id="file_upload" required> -->
-                                        <input type="file" name="file_upload" id="file_upload" required> 
+                                            <!-- <input type="file" name="file" id="file_upload" required>  -->
+
+                                        <div class="imgUp">
+                                            <div class="imagePreview"></div>
+                                                <label class="btn btn-deep-purple upload">
+                                                    Upload<input type="file" class="uploadFile img" name="file" id="file_upload" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;" required>
+                                                </label>
+                                            <p class="card-text addbanner">Your banner image should be 1720 * 360 pixels and a maximum size of 20mb.<p>
+                                        </div>
                                         
-                                        <div class="row" style="padding:50px;">
-                                        <input type="submit" name="submit" value="Add Iteam" class="btn btn-danger">
+                                        <div class="row" style="padding:10px;" >
+                                            <input type="submit" name="submit" value="Add Item" style="background-color: #55acee;" class="btn btn-danger">
 
                                             </form>
-                                     </div>
-                                     </div>  
-                                     </div> 
+                                        </div>
+                                        </div>  
+                                    </div> 
                                         
                                         
 
 
-                                       <?php
-
-
+                                    <?php
                                      // Check if image file is a actual image or fake image
                                     if(isset($_POST["submit"])) {
 
-                                                $target_dir = "items/";
-                                                $target_file = $target_dir . basename($_FILES["file_upload"]["name"]);
-                                                $uploadOk = 1;
-                                                $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+                                                $selectItemName ='SELECT * FROM `item` WHERE item_name = "'.$_POST["item_name"].'"';
+                                                $resultselectItemName = mysqli_query($connection, $selectItemName);
+                                                $checkResult=mysqli_num_rows($resultselectItemName);
 
-                                                $check = getimagesize($_FILES["file_upload"]["tmp_name"]);
-                                                if($check !== false) {
-                                                    echo "File is an image - " . $check["mime"] . ".";
-                                                    $uploadOk = 1;
-                                                } else {
-                                                    echo "File is not an image.";
-                                                    $uploadOk = 0;
-                                                }
+                                                if($checkResult>0){
+                                                    
+                                                    echo'<script>alert("Item Name already available");</script>';
+                                                    // echo '<script>swal("Oder success!", "Item Name already available.!", "success").then (function(){
+                                                    //     window.location = "StoreAdd_items.php" ;
+                                                    // });
+                                                    //     </script>';
+
+                                                }else{
+                                                    ////new items ////
+                                                    $name = $_FILES['file']['name'];
+                                                    $target_dir = "../items/";
+                                                    // move_uploaded_file($temp,"items/".$name);
+                                                    
+                                                    $target_file = $target_dir . basename($_FILES["file"]["name"]);
+                                                    // Select file type
+                                                    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
                                                 
+                                                    // Valid file extensions
+                                                    $extensions_arr = array("jpg","jpeg","png");
+                                                
+                                                    //uniqe name for image
+                                                    $currentTimeinSeconds = time();
+                                                    $currentDate = date('Y-m-d', time());
+                                                    $uniqname= $currentTimeinSeconds.$currentDate;
+                                                    $name=$_SESSION["user_id"].$uniqname.strstr($name, '.');
+                                                    // $name="11".$uniqname.strstr($name, '.');
+                                                    // Check extension
+                                                    if( in_array($imageFileType,$extensions_arr) ){
+                                                        // Upload file
+                                                        if(move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$name)){
+                                                        // echo "The file ". htmlspecialchars( basename( $_FILES["file_upload"]["name"])). " has been uploaded.";
 
-                                                // Check if file already exists
-                                            if (file_exists($target_file)) {
-                                                echo "Sorry, file already exists.";
-                                                $uploadOk = 0;
-                                                }
-
-                                                // Check file size
+                                                        // $imgpath = "items/". htmlspecialchars( basename( $_FILES["file_upload"]["name"]));
                                             
+                                                if(!empty($_POST["item_name"] && $_POST["category_type"] && $_POST["discription"] && $_POST["quantity"] && $_POST["unit_price"] && $_POST["o_max_qut"])){
 
-                                                // Allow certain file formats
-                                                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-                                                && $imageFileType != "gif" ) {
-                                                echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                                                $uploadOk = 0;
+                                                    $item_name  = $_POST["item_name"];
+                                                    $category_type  = $_POST["category_type"];
+                                                    $discription  = $_POST["discription"];
+                                                    $quantity  = $_POST["quantity"];
+                                                    $unit_price  = $_POST["unit_price"];
+                                                    $o_max_qut = $_POST["o_max_qut"];
+        
+
+                                                $sql = 'INSERT INTO item (item_name, category_type, discription, quantity, unit_price, o_max_qut, data_path )
+                                                VALUES("'.$item_name.'", "'.$category_type.'","'.$discription.'","'.$quantity.'","'.$unit_price.'","'.$o_max_qut.'", "'.$name.'")';
+
+                                                    if ($connection->query($sql) === TRUE) {
+                                                        echo '<script>swal("New item add success!", "New item add success!", "success").then (function(){
+                                                            window.location = "Store.php" ;
+                                                        });
+                                                            </script>';
+                                                            } else {
+                                                            echo "Error: " . $sql . "<br>" . $connection->error;
+                                                            }
+            
+                                                            $connection->close();
+                                                     }
+        
+                                                    } else {
+                                                        echo "Sorry, there was an error uploading your file.";
+                                                    }
+                                                    }
                                                 }
-
-                                                // Check if $uploadOk is set to 0 by an error
-                                                if ($uploadOk == 0) {
-                                                echo "Sorry, your file was not uploaded.";
-                                                // if everything is ok, try to upload file
-                                                } else {
-
-                                                if (move_uploaded_file($_FILES["file_upload"]["tmp_name"], $target_file)) {
-                                                    echo "The file ". htmlspecialchars( basename( $_FILES["file_upload"]["name"])). " has been uploaded.";
-
-                                                    $imgpath = "items/". htmlspecialchars( basename( $_FILES["file_upload"]["name"]));
-                                           
-                                            if(!empty($_POST["item_name"] && $_POST["category_type"] && $_POST["discription"] && $_POST["quantity"] && $_POST["unit_price"])){
-
-                                                $item_name  = $_POST["item_name"];
-                                                $category_type  = $_POST["category_type"];
-                                                $discription  = $_POST["discription"];
-                                                $quantity  = $_POST["quantity"];
-                                                $unit_price  = $_POST["unit_price"];
-
-
-
-                                                echo '<br>';
-                                                echo "Item Name is :". $item_name;
-                                                echo '<br>';
-        
-                                                echo $category_type;
-                                                echo '<br>';
-
-                                                echo $discription;
-                                                echo '<br>';
-
-                                                echo $quantity;
-                                                echo '<br>';
-
-                                                echo $unit_price;
-                                                echo '<br>';
-        
-                                                echo $imgpath;
-        
-
-
-                                        include 'db_connection.php';
-
-                                        $sql = 'INSERT INTO item (item_name, category_type, discription, quantity, unit_price, data_path )
-                                        VALUES("'.$item_name.'", "'.$category_type.'","'.$discription.'","'.$quantity.'","'.$unit_price.'", "'.$imgpath.'")';
-
-                                                if ($connection->query($sql) === TRUE) {
-                                                        echo "New record created successfully";
-                                                        } else {
-                                                        echo "Error: " . $sql . "<br>" . $connection->error;
-                                                        }
-        
-                                                        $connection->close();
-
-
-                                        }
-                                           
-                                           
-    
-                                           
-    
-    
-                                                } else {
-                                                    echo "Sorry, there was an error uploading your file.";
-                                                }
-                                                }
-        
         
                                             }         
-
-
-
-                                        
-
-
-
-                                        ?>
-
-
-
-
-
-
-
-
+                                    ?>
                                     </div>
                                 </div>
                             </div>
@@ -329,14 +332,6 @@
         </div>   
         <!-- End store-->
 
-        <!-- footer -->
-            <footer>
-               © 2021 Medicare Online Pharmacy System Admin by Kalhara
-            </footer>
-        </div>
-        </div>
-        <!-- End footer -->
-
     
     <!-- All Jquery -->
     <script src="assets/plugins/jquery/jquery.min.js"></script>
@@ -344,6 +339,37 @@
     <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/sidebarmenu.js"></script>
     <script src="js/custom.min.js"></script>
+
+    <script>
+         $(".imgAdd").click(function(){
+        $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-2 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
+        });
+        $(document).on("click", "i.del" , function() {
+        // 	to remove card
+        $(this).parent().remove();
+        // to clear image
+        // $(this).parent().find('.imagePreview').css("background-image","url('')");
+        });
+        $(function() {
+            $(document).on("change",".uploadFile", function()
+            {
+                    var uploadFile = $(this);
+                var files = !!this.files ? this.files : [];
+                if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+        
+                if (/^image/.test( files[0].type)){ // only image file
+                    var reader = new FileReader(); // instance of the FileReader
+                    reader.readAsDataURL(files[0]); // read the local file
+        
+                    reader.onloadend = function(){ // set image data as background of div
+                        //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
+        uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url("+this.result+")");
+                    }
+                }
+            
+            });
+        });
+    </script>
 
 
 </body>

@@ -1,3 +1,17 @@
+<?php
+//Database connection 
+include 'db_connection.php';
+session_start();
+
+if(isset($_SESSION["admin_id"])){
+    
+    
+}
+else{
+    header("location:../home_page.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang>
 
@@ -13,6 +27,8 @@
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.0/css/dataTables.bootstrap4.min.css">
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -41,8 +57,8 @@
                     </ul>
                     <!-- Profile -->
                     <div class="ht-right">
-                         <a href="my_account.php" class="login-panel"><i class="fa fa-user" style="width:50px;"></i></a>
-                          <a href=".." class="login-panel"><i class="fa fa-sign-out" style="width:50px;"></i></a>
+                         <a href="my_account.php" class="login-panel"><i class="fa fa-user" style="width:50px;color: white;"></i></a>
+                          <a href="../logout.php" class="login-panel"><i class="fa fa-sign-out" style="width:50px;color: white;"></i></a>
                     <div class="lan-selector">
                     </div>
                     </div>
@@ -58,17 +74,15 @@
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="index.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Category</span></a>
+                        <li> <a class="waves-effect waves-dark.active" href="Category.php" aria-expanded="false"><i class="fa fa-window-maximize"></i><span class="hide-menu">Category</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="Store.php" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Store</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="users.php" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Users</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">oders</span></a>
+                        <li> <a class="waves-effect waves-dark" href="oders.php" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Orders</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="prescription.php" aria-expanded="false"><i class="fa fa-newspaper-o"></i><span class="hide-menu">prescription</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="home_page_eddit.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Page customization</span></a>
+                        <li> <a class="waves-effect waves-dark" href="delivery_city.php" aria-expanded="false"><i class="mdi mdi-monitor"></i><span class="hide-menu">Delivery city</span></a>
                         </li>
                     </ul>
                 </nav>
@@ -93,12 +107,11 @@
         <!-- category -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="card">
                             <div class="col-md-7 col-4 align-self-center"></div>
                             <div class="card-block">   
                                 <h4 class="card-title">All Users</h4>
                                 <div class="table-responsive" style="height: 400px;overflow: scroll;">
-                                    <table class="table">
+                                    <table class="table table-striped table-responsive-md table-bordered my-5" style="width:100%" id="table">
                                         <thead>
                                             <tr>
                                                 
@@ -107,10 +120,9 @@
                                                 <th>E_mail</th>
                                                 <th>Phone Number</th>
                                                 <th>Address</th>
-                                                <th>Password</th>
                                                 <th>User type</th>
                                                 <th>Edit</th>
-                                                <th>Remove</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -137,10 +149,9 @@
                                                             <td>'.$row["e_mail"].'</td>
                                                             <td>'.$row["phone_number"] .'</td>
                                                             <td>'.$row["address"].'</td>
-                                                            <td>'.$row["password"].'</td>
                                                             <td>'.$row["user_type"] .'</td>
-                                                            <td><a href="edit_user.php?id='.$id.'"><i class="mdi mdi-table"></i></a> </td>
-                                                            <td><i class="fa fa-trash"></i></td>
+                                                            <td><a href="edit_user.php?id='.$id.'"><i class="fa fa-pencil-square-o"></i></a> </td>
+                                                            
                                                                 
                                                         </tr> 
                                                         
@@ -179,7 +190,7 @@
 
         <!-- footer -->
             <footer class="footer">
-               © 2021 Medicare Online Pharmacy System Admin by Kalhara
+               © 2022 Medicare Online Pharmacy System Admin by Kalhara
             </footer>
         </div>
         <!-- End footer -->
@@ -191,6 +202,24 @@
     <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/sidebarmenu.js"></script>
     <script src="js/custom.min.js"></script>
+     <!-- javascript libraries -->
+     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.0/js/dataTables.bootstrap4.min.js"></script>
+    <!-- <script src="../assets/js/jquery-3.2.1.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+  
+
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable();
+        } );
+    </script>
+
 </body>
 
 </html>

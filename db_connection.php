@@ -8,17 +8,10 @@ $database="online_pharmacy_db";
 
 $connection = mysqli_connect($servername,$username,$password,$database) ;
 
-//cheak_connection
+//check_connection
 
 if ($connection -> connect_error ) {
         die("connection failed:" .$connection -> connect_error);
 }
-else{
-    //echo "connection successfully";
-    //mysqli_close ($connection);
-}
-
-// mysqli object-oriented
-
 
 ?>
